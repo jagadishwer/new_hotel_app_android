@@ -1,8 +1,84 @@
 <script>
-  $(function() {
+  $(document).ready(function() {
  $('.datepicker1').datepicker({dateFormat: 'dd-mm-yy'});
-});
+ $('#graph').hide();
+ $('#actual_info_report').hide();
 
+});
+function system_info_report_on_submit(){
+  
+  if ($('#sorting_start_date').val()!="" && $('#sorting_start_date').val()!=""){
+ system_info_report1($('#sorting_start_date').val(),$('#sorting_end_date').val());
+  }
+  else
+    {
+      return false;
+    }
+}
+
+function report_request(){
+  var xmlhttp;
+    if (window.XMLHttpRequest)
+    {// code for IE7+, Firefox, Chrome, Opera, Safari
+      xmlhttp=new XMLHttpRequest();
+    }
+    else
+    {// code for IE6, IE5
+      xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    xmlhttp.onreadystatechange=function()
+    {
+      if (xmlhttp.readyState==4 && xmlhttp.status==200)
+      {
+        document.getElementById("myDiv").innerHTML=xmlhttp.responseText;
+        system_info_report_on_submit()
+      }
+    }
+    xmlhttp.open("GET","/hotelsessions/inventory_no_layout?sorting[start_date]="+$('#sorting_start_date').val()+"&sorting[end_date]="+$('#sorting_end_date').val(),true);
+    xmlhttp.send();
+}
+function system_info_report(){
+$('#graph').hide();
+  $('#actual_info_report').hide();
+  $('#system_info_report').show();
+}
+function system_info_report1(sd,ed)
+{
+  $('#graph').hide();
+  $('#actual_info_report').hide();
+  $('#system_info_report').show();
+  
+  var xmlhttp;
+    if (window.XMLHttpRequest)
+    {// code for IE7+, Firefox, Chrome, Opera, Safari
+      xmlhttp=new XMLHttpRequest();
+    }
+    else
+    {// code for IE6, IE5
+      xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    xmlhttp.onreadystatechange=function()
+    {
+      if (xmlhttp.readyState==4 && xmlhttp.status==200)
+      {
+        document.getElementById("system_info_report").innerHTML=xmlhttp.responseText;
+      }
+    }
+    xmlhttp.open("GET","/reports/system_generated_report?sorting[start_date]="+sd+"&sorting[end_date]="+ed,true);
+    xmlhttp.send();
+}
+function actual_info_report()
+{
+  $('#graph').hide();
+  $('#actual_info_report').show();
+  $('#system_info_report').hide();
+}
+function graph()
+{
+  $('#graph').show();
+  $('#actual_info_report').hide();
+  $('#system_info_report').hide();
+}
 </script>
 <style>
   select {
@@ -29,16 +105,26 @@
   background-color: green;
   width: 10px;
 }
+#graph,#actual_info_report,#system_info_report{
+  width:900px;
+  height:500px;
+  background-color:white;
+  margin-left:8px;
+  border:6px solid whitesmoke;
+  overflow:scroll;
+  position: absolute;
+  border-radius:10px;
+
+}
 </style>
-<%@a=[];@l=[];@r=[]%>
-<%@a<<0;@l<<0;@r<<0%>
+
 <div class="page-header" style="margin-top:10px;">
-  <h1 style="text-align:left;color:whitesmoke;font-variant:small-caps;font-family:fantasy;margin-left:20px;">Report Generated based on Stock checks done by Authorize Staff </h1>
+  <h1 style="text-align:left;color:whitesmoke;font-variant:small-caps;font-family:fantasy;margin-left:20px;">Reports </h1>
 </div>
  <div style="width:900px;margin-left:45px;background-color:#ff6666; border: 1px solid;">
  <div style ="width:350px;float:left;margin-left: 30px;margin-top:50px;">
 
-  <%=form_for :sorting, :url=>"inventory" do%>
+  <%#=form_for :sorting, :url=>"inventory", :html=>{:onsubmit=>"system_info_report_on_submit()"} do%>
 
 
       <%= label_tag  'start Date'%>
@@ -50,117 +136,13 @@
 
   </div>
  <div style ="margin-top:50px;padding:20px;">
- <%=  submit_tag "OK",:class=>'btn-large btn-success', :id => 'my_button'%>
+ <%#=  submit_tag "OK",:class=>'btn-large btn-success', :id => 'my_button'%>
+   <%=  button_tag "OK",:class=>'btn-large btn-success', :id => 'my_button',:onclick=>"report_request()"%>
  </div>
   </div>
-<div id="myDiv"style="width:1000px;height:880px;float: left;margin-left:40px;overflow: scroll;padding: 10px;">
-  
- 
-    <%#*START DATE <%=date_select 'sorting[start_date]' ,"dob",:use_month_numbers => true,:order => [:day, :month, :year],:prompt => { :day => 'dd', :month => 'mm', :year => 'yyyy' },:start_year => 2000,:end_year=>(Date.today).year%%>
-    <%#*END DATE <%=date_select 'sorting[end_date]' ,"dob",:use_month_numbers => true,:order => [:day, :month, :year],:prompt => { :day => 'dd', :month => 'mm', :year => 'yyyy' },:start_year => 2000,:end_year=>(Date.today).year+1%%>
-    <%#=submit_tag "ok",:class=>'btn-small btn-info'%>
+<div id="myDiv"style="width:1000px;height:880px;float: left;margin-left:40px;padding: 10px;">
 
-  <%end%>
-  <%if !@stcs.empty?%>
-    <%=link_to "save as PDF",{:action=>'inventory_pdf',:format=>'pdf',:end_date=>@ed,:start_date=>@sd},:target=>'_blank',:class=>'btn btn-success'%><br/><br/>
-
-
-
-    <div style="width:900px;height:500px;background-color:white; margin-left:8px;border:3px solid black; overflow:scroll;">
-      <table class="table table-hover "style="border:1px solid rgb(221,221,221)">
-        <tr style="background-color:#ffcccc"><td></td><%(1..@stcs_size-1).each do |x|%>
-            <td><%=@stcs[x].created_at.to_date%></td>
-          <%end%></tr>
-
-        <tr style="background-color:blanchedalmond; "><td>Customer count</td><%(1..@stcs_size-1).each do |x|%>
-            <td> <%=Customer.count(:conditions=>{:date_of_transcation=>[@stcs[x-1].created_at..@stcs[x].created_at]})%></td>
-          <%end%></tr>
-        <tr style="background-color:blanchedalmond; "><td>NET SALES (Rs)</td><%(1..@stcs_size-1).each do |x|%>
-            <td><%sum=Customer.sum(:total,:conditions=>{:status=>2,:date_of_transcation=>[@stcs[x-1].created_at..@stcs[x].created_at]})%>
-            <%=sum%><%@a<<sum;@l<<@stcs[x].created_at.to_date%></td>
-          <%end%>  </tr>
-       
-        <tr style="background-color:blanchedalmond; "><td>Payments To Suppliers (Rs)</td><%(1..@stcs_size-1).each do |x|%>
-            <td><%=DeliveryItem.sum(:mrp, :conditions=>{:payment_status=>1,:updated_at=>[@stcs[x-1].created_at..@stcs[x].created_at]})%></td>
-          <%end%>  </tr>
-
-        <tr style="background-color:blanchedalmond; "><td>Salaries (Rs)</td><%(1..@stcs_size-1).each do |x|%>
-            <td><%=Salary.sum(:net_payable,:conditions=>{:created_at=>[@stcs[x-1].created_at..@stcs[x].created_at]})%></td>
-          <%end%>  </tr>
-
-        <tr style="background-color:blanchedalmond; "><td>Other Expenditures (Rs)</td><%(1..@stcs_size-1).each do |x|%>
-            <td><%=PaidOut.sum(:amount,:conditions=>{:created_at=>[@stcs[x-1].created_at..@stcs[x].created_at]})%></td>
-          <%end%>  </tr>
-
-        <tr style="background-color:blanchedalmond; "><td>BALANCE AMOUNT (Rs)</td><%(1..@stcs_size-1).each do |x|%>
-            <td><%=Customer.sum(:total,:conditions=>{:status=>2,:date_of_transcation=>[@stcs[x-1].created_at..@stcs[x].created_at]})-DeliveryItem.sum(:mrp, :conditions=>{:payment_status=>1,:updated_at=>[@stcs[x-1].created_at..@stcs[x].created_at]})-PaidOut.sum(:amount,:conditions=>{:created_at=>[@stcs[x-1].created_at..@stcs[x].created_at]})-Salary.sum(:net_payable,:conditions=>{:created_at=>[@stcs[x-1].created_at..@stcs[x].created_at]})%></td>
-          <%end%>  </tr>
-         <tr><td>WORTH OF RAW MATERIAL PURCHASED(Rs)</td><%(1..@stcs_size-1).each do |x|%>
-            <td><%=Delivery.sum(:cost,:conditions=>{:created_at=>[@stcs[x-1].created_at..@stcs[x].created_at]})%></td>
-          <%end%>  </tr>
-        <tr><td>WORTH OF PRE OWNED RAW MATIRAL (Rs)</td><td><%=@cost_brought_forward%></td><%(1..@stcs_size-2).each do |x|%>
-            <td><%=@stcs[x].cost%></td>
-          <%end%>  </tr>
-
-
-        <tr><td>WORTH OF RAW MATERIAL AVAILABLE WORTH(Rs)</td><%(1..@stcs_size-1).each do |x|%>
-            <td><%=@stcs[x].cost%></td>
-          <%end%>  </tr>
-        <tr><td>WORTH OF RAW MATERIAL SPENT (Rs)</td><td><%rs=@cost_brought_forward+(Delivery.sum(:cost,:conditions=>{:created_at=>[@stcs[0].created_at..@stcs[1].created_at]}))-@stcs[1].cost%>
-          <%=rs%></td>
-         <%@r<<rs%>
-  <%(2..@stcs_size-1).each do |x|%>
-
-            <td><%rs=@stcs[x-1].cost+(Delivery.sum(:cost,:conditions=>{:created_at=>[@stcs[x-1].created_at..@stcs[x].created_at]}))-@stcs[x].cost%>
-
-            <%=rs%><%@r<<rs%> </td>
-          <%end%>  </tr>
-
-        <tr style="background-color: rgb(221, 221, 221);"><td style="text-align: center;font-weight:bold">QUATITY OF ITEMS SOLD</td></tr>
-        <%(Item.all).each do |i|%>
-          <tr><td><%=i.item_name%></td><%(1..@stcs_size-1).each do |x|%>
-              <td><%=i.orderlists.sum(:quantity,:conditions=>{:created_at=>[@stcs[x-1].created_at..@stcs[x].created_at]})%> </td><%end%></tr>
-        <%end%>
-
-        <tr style="background-color: rgb(221, 221, 221);"><td style="text-align: center;font-weight:bold">QUANTITY OF ITEM PURCHASED </td></tr>
-        <%@stlis.each do |item|%>
-          <tr>
-            <td><%=item.name%></td><%(1..@stcs_size-1).each do |x|%>
-              <td><%=item.delivery_items.sum(:quantity,:conditions=>{:created_at=>[@stcs[x-1].created_at..@stcs[x].created_at]})%>
-              </td>
-            <%end%>
-          </tr>
-        <%end%>
-        <tr style="background-color: rgb(221, 221, 221);">
-          <td style="text-align: center;font-weight:bold">ACTUAL QUATITY OF REMAINING ITEM(this is derived from stock checks)</td>
-        </tr>
-        <%@stlis.each do |item|%>
-          <tr>
-            <td><%=item.name%></td><%(1..@stcs_size-1).each do |x|%>
-
-              <td><%=item.remaining_items.sum(:quantity,:conditions=>{:created_at=>@stcs[x].created_at})%>
-              </td>
-            <%end%>
-          </tr>
-          
-        <%end%>
-      
-    </table>
-
-  </div>
-  <div style="width:900px;height:400px;background-color:white;margin-left:10px;margin-top: 20px;border:3px solid black; overflow:scroll;">
-    <div style="width: auto;float: right;margin-right: 80px;margin-top: 50px;">
-      <ul class ="nav nav-pills nav-stacked">
-      <li><hr class="hr1"></hr></li>Sales
-      <li><hr class="hr2"></hr></li>Raw Items
-      </ul>
-    </div>
-    <%h=@a.max%>
-    <center>
-      <%=image_tag Gchart.line(:title => 'sales',:bar_colors => 'FF0000,00FF00',:size=>'600x300',
-              :data => [@a,@r],:axis_with_labels => ["x","y"],:axis_labels => [@l,[0,(h/4).round,(h/3).round,(h/2).round,h.round]] )%></center>
-<%else%>
-          <%#=  "No TRANSCATIONS IN GIVEN DATES" %>
-<%end%>
-  </div>
 </div>
+<%#*style="width:900px;height:400px;background-color:white;margin-left:10px;margin-top: 20px;border:3px solid black; overflow:scroll;"%>
+
+<%#*style="width:900px;height:500px;background-color:white; margin-left:8px;border:3px solid black; overflow:scroll;"%>

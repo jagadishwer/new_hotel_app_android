@@ -1,0 +1,130 @@
+
+<%@a=[];@l=[];@r=[]%>
+<%@a<<0;@l<<0;@r<<0%>
+    <%#*START DATE <%=date_select 'sorting[start_date]' ,"dob",:use_month_numbers => true,:order => [:day, :month, :year],:prompt => { :day => 'dd', :month => 'mm', :year => 'yyyy' },:start_year => 2000,:end_year=>(Date.today).year%%>
+    <%#*END DATE <%=date_select 'sorting[end_date]' ,"dob",:use_month_numbers => true,:order => [:day, :month, :year],:prompt => { :day => 'dd', :month => 'mm', :year => 'yyyy' },:start_year => 2000,:end_year=>(Date.today).year+1%%>
+    <%#=submit_tag "ok",:class=>'btn-small btn-info'%>
+
+  <%#end%>
+
+  <div style="margin-left:40px;">
+    <%=button_tag "Based On System Information",:class=>"btn btn-danger",:onclick=>"system_info_report()"%>
+
+ <%=button_tag "Based On Stock Verification done by staff",:class=>"btn btn-warning",:onclick=>"actual_info_report()"%>
+
+<%=button_tag "Graph based On Stock Verification done by staff",:class=>"btn btn",:onclick=>"graph()"%>
+  </div>
+
+
+    <div id="actual_info_report">
+      <%if !@stcs.empty?%>
+      <table class="table table-hover "style="border:1px solid rgb(221,221,221)">
+        <caption class="btn-warning"> <h3 style="text-align:left;color:white;font-variant:small-caps;font-family:fantasy;margin-left:20px;">Report Generated based on Stock checks done by Authorize Staff </h3>
+ <%=link_to "save as PDF",{:action=>'inventory_pdf',:format=>'pdf',:end_date=>@ed,:start_date=>@sd},:target=>'_blank',:class=>'btn btn-success'%><br/><br/>
+</caption>
+        <tr style="background-color:blanchedalmond; "><td></td><%(1..@stcs_size-1).each do |x|%>
+            <td><%=@stcs[x].created_at.to_date%></td>
+          <%end%></tr>
+
+        <tr style="background-color:blanchedalmond; "><td>Customer count</td><%(1..@stcs_size-1).each do |x|%>
+            <td> <%=Customer.count(:conditions=>{:date_of_transcation=>[@stcs[x-1].created_at..@stcs[x].created_at]})%></td>
+          <%end%></tr>
+        <tr style="background-color:blanchedalmond; "><td>NET SALES (Rs)</td><%(1..@stcs_size-1).each do |x|%>
+            <td><%sum=Customer.sum(:total,:conditions=>{:status=>2,:date_of_transcation=>[@stcs[x-1].created_at..@stcs[x].created_at]})%>
+            <%=sum%><%@a<<sum;@l<<@stcs[x].created_at.to_date%></td>
+          <%end%>  </tr>
+
+        <tr style="background-color:blanchedalmond; "><td>Payments To Suppliers (Rs)</td><%(1..@stcs_size-1).each do |x|%>
+            <td><%=DeliveryItem.sum(:mrp, :conditions=>{:payment_status=>1,:updated_at=>[@stcs[x-1].created_at..@stcs[x].created_at]})%></td>
+          <%end%>  </tr>
+
+        <tr style="background-color:blanchedalmond; "><td>Salaries (Rs)</td><%(1..@stcs_size-1).each do |x|%>
+            <td><%=Salary.sum(:net_payable,:conditions=>{:created_at=>[@stcs[x-1].created_at..@stcs[x].created_at]})%></td>
+          <%end%>  </tr>
+
+        <tr style="background-color:blanchedalmond; "><td>Other Expenditures (Rs)</td><%(1..@stcs_size-1).each do |x|%>
+            <td><%=PaidOut.sum(:amount,:conditions=>{:created_at=>[@stcs[x-1].created_at..@stcs[x].created_at]})%></td>
+          <%end%>  </tr>
+
+        <tr style="background-color:blanchedalmond; "><td>BALANCE AMOUNT (Rs)</td><%(1..@stcs_size-1).each do |x|%>
+            <td><%=Customer.sum(:total,:conditions=>{:status=>2,:date_of_transcation=>[@stcs[x-1].created_at..@stcs[x].created_at]})-DeliveryItem.sum(:mrp, :conditions=>{:payment_status=>1,:updated_at=>[@stcs[x-1].created_at..@stcs[x].created_at]})-PaidOut.sum(:amount,:conditions=>{:created_at=>[@stcs[x-1].created_at..@stcs[x].created_at]})-Salary.sum(:net_payable,:conditions=>{:created_at=>[@stcs[x-1].created_at..@stcs[x].created_at]})%></td>
+          <%end%>  </tr>
+         <tr><td>WORTH OF RAW MATERIAL PURCHASED(Rs)</td><%(1..@stcs_size-1).each do |x|%>
+            <td><%=Delivery.sum(:cost,:conditions=>{:created_at=>[@stcs[x-1].created_at..@stcs[x].created_at]})%></td>
+          <%end%>  </tr>
+        <tr><td>WORTH OF PRE OWNED RAW MATIRAL (Rs)</td><td><%=@cost_brought_forward%></td><%(1..@stcs_size-2).each do |x|%>
+            <td><%=@stcs[x].cost%></td>
+          <%end%>  </tr>
+
+
+        <tr><td>WORTH OF RAW MATERIAL AVAILABLE WORTH(Rs)</td><%(1..@stcs_size-1).each do |x|%>
+            <td><%=@stcs[x].cost%></td>
+          <%end%>  </tr>
+        <tr><td>WORTH OF RAW MATERIAL SPENT (Rs)</td><td><%rs=@cost_brought_forward+(Delivery.sum(:cost,:conditions=>{:created_at=>[@stcs[0].created_at..@stcs[1].created_at]}))-@stcs[1].cost%>
+          <%=rs%></td>
+         <%@r<<rs%>
+  <%(2..@stcs_size-1).each do |x|%>
+
+            <td><%rs=@stcs[x-1].cost+(Delivery.sum(:cost,:conditions=>{:created_at=>[@stcs[x-1].created_at..@stcs[x].created_at]}))-@stcs[x].cost%>
+
+            <%=rs%><%@r<<rs%> </td>
+          <%end%>  </tr>
+
+        <tr style="background-color: rgb(221, 221, 221);"><td style="text-align: center;font-weight:bold">QUATITY OF ITEMS SOLD</td></tr>
+        <%(Item.all).each do |i|%>
+          <tr><td><%=i.item_name%></td><%(1..@stcs_size-1).each do |x|%>
+              <td><%=i.orderlists.sum(:quantity,:conditions=>{:created_at=>[@stcs[x-1].created_at..@stcs[x].created_at]})%> </td><%end%></tr>
+        <%end%>
+
+        <tr style="background-color: rgb(221, 221, 221);"><td style="text-align: center;font-weight:bold">QUANTITY OF ITEM PURCHASED </td></tr>
+        <%@stlis.each do |item|%>
+          <tr>
+            <td><%=item.name%></td><%(1..@stcs_size-1).each do |x|%>
+              <td><%=item.delivery_items.sum(:quantity,:conditions=>{:created_at=>[@stcs[x-1].created_at..@stcs[x].created_at]})%>
+              </td>
+            <%end%>
+          </tr>
+        <%end%>
+        <tr style="background-color: rgb(221, 221, 221);">
+          <td style="text-align: center;font-weight:bold">ACTUAL QUATITY OF REMAINING ITEM(this is derived from stock checks)</td>
+        </tr>
+        <%@stlis.each do |item|%>
+          <tr>
+            <td><%=item.name%></td><%(1..@stcs_size-1).each do |x|%>
+
+              <td><%=item.remaining_items.sum(:quantity,:conditions=>{:created_at=>@stcs[x].created_at})%>
+              </td>
+            <%end%>
+          </tr>
+
+        <%end%>
+
+    </table>
+      <%else%>
+     <%=  "No STOCK CHECKS FOR GIVEN DATES" %>
+<%end%>
+  </div>
+  <div id="graph">
+        <%if !@stcs.empty?%>
+    <div style="width: auto;float: right;margin-right: 80px;margin-top: 50px;">
+      <ul class ="nav nav-pills nav-stacked">
+      <li><hr class="hr1"></hr></li>Sales
+      <li><hr class="hr2"></hr></li>Raw Items
+      </ul>
+    </div>
+    <%h=@a.max%>
+    <center>
+      <%=image_tag Gchart.line(:title => 'sales',:bar_colors => 'FF0000,00FF00',:size=>'600x300',:data => [@a,@r],:axis_with_labels => ["x","y"],:axis_labels => [@l,[0,(h/4).round,(h/3).round,(h/2).round,h.round]] )%></center>
+<%else%>
+     <%=  "No GRAPH FOR GIVEN DATES" %>
+<%end%>
+  </div>
+    <div id="system_info_report"></div>
+
+
+         
+
+
+
+
+

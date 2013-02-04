@@ -53,4 +53,21 @@ unless @sc.nil?
     flash[:notice]="Successfully Sent"
     render '/hotelsessions/day_report'
   end
+  def system_generated_report
+    if params.key?(:sorting)
+    @sd = Date.parse( params[:sorting][:start_date])
+      @ed = Date.parse( params[:sorting][:end_date]).next
+      else
+     @sd =  User.first.created_at.to_date
+     @ed = Date.tomorrow
+    end
+      if @sd > @ed
+        flash[:error] = 'Oops! Start Date should not be erlier than end date. Please try again!'
+      else
+        @items=Item.all
+    @stlis=StockListItem.all
+
+      end
+    render :layout=>false
+end
 end

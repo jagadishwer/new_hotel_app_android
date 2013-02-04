@@ -311,49 +311,16 @@ class HotelsessionsController < ApplicationController
     #return
   end
   def inventory
-    @stcs=[]
-    if params.key?(:sorting)
-      if params[:sorting][:start_date].empty? or params[:sorting][:end_date].empty?
-        flash[:error]= 'Dates should not be empty!'
-        redirect_to :controller => 'hotelsessions', :action => 'inventory'
-      else
-#      @sd = Date.parse( params[:sorting][:start_date].split('-').reverse!.join('-'))
-#      @ed = Date.parse( params[:sorting][:end_date].split('-').reverse!.join('-'))
-@sd = Date.parse( params[:sorting][:start_date])
-      @ed = Date.parse( params[:sorting][:end_date])
-      if @sd > @ed
-        flash[:error] = 'Oops! Start Date should not be erlier than end date. Please try again!'
-      else
-#      @sd = Date.parse(params[:sorting][:start_date].split('-').reverse!.join('-'))
-#      @ed = Date.parse(params[:sorting][:end_date].split('-').reverse!.join('-'))
-#      #@sd=Date.parse( params[:sorting][:start_date].to_a.sort.collect{|c| c[1]}.join("-") )
-#      #@ed=Date.parse( params[:sorting][:end_date].to_a.sort.collect{|c| c[1]}.join("-") )
-      @sorted_customers=Customer.find(:all,:order=>'updated_at DESC',:conditions=>{:status=>2,:date_of_transcation=>[@sd..@ed]})
-      @stcs=StockCount.find(:all,:conditions=>{:created_at=>(@sd..@ed)})
-      end
-      end
-          #puts "----1--"
-      #puts @stcs.inspect
-      # puts "----1--"
-      if !@stcs.empty?
-        last=StockCount.find(:last,:conditions=>['created_at <?',@sd])
-        #puts"--------2-----"
-        #puts last
-      if last.nil?
-        last=Delivery.find(:first)
-        @cost_brought_forward=0
-      else
-        @cost_brought_forward=last.cost
-      end
-      #puts last
-      #puts"--------2-----"
-      @stcs.unshift(last) 
-      @stcs_size=@stcs.size
-      @stlis=StockListItem.all
-       end
-    end
+    inventory_code
     #authorize! :inventory, @stlis
   end
+  def inventory_no_layout
+    inventory_code
+    #authorize! :inventory, @stlis
+    render 'inventory_no_layout',:layout=>false
+  end
+
+
   def inventory_pdf
 
     if params.key?(:sorting)
@@ -376,6 +343,42 @@ class HotelsessionsController < ApplicationController
   def check_inventory
     
   end
+private
+def inventory_code
+  @stcs=[]
+    if params.key?(:sorting)
+      if params[:sorting][:start_date].empty? or params[:sorting][:end_date].empty?
+        flash[:error]= 'Dates should not be empty!'
+        redirect_to :controller => 'hotelsessions', :action => 'inventory'
+      else
+    #@sd = Date.parse( params[:sorting][:start_date].split('-').reverse!.join('-'))
+    #@ed = Date.parse( params[:sorting][:end_date].split('-').reverse!.join('-'))
+@sd = Date.parse( params[:sorting][:start_date])
+      @ed = Date.parse( params[:sorting][:end_date]).next
 
+      if @sd > @ed
+        flash[:error] = 'Oops! Start Date should not be erlier than end date. Please try again!'
+      else
+#        @sorted_customers=Customer.find(:all,:order=>'updated_at DESC',:conditions=>{:status=>2,:date_of_transcation=>[@sd..@ed]})
+      @stcs=StockCount.find(:all,:conditions=>{:created_at=>(@sd..@ed)})
+      end
+      end
+
+      if !@stcs.empty?
+        last=StockCount.find(:last,:conditions=>['created_at <?',@sd])
+
+      if last.nil?
+        last=Delivery.find(:first)
+        @cost_brought_forward=0
+      else
+        @cost_brought_forward=last.cost
+      end
+
+      @stcs.unshift(last)
+      @stcs_size=@stcs.size
+      @stlis=StockListItem.all
+       end
+    end
+end
 end
 

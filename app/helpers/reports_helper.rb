@@ -14,7 +14,7 @@ module ReportsHelper
   end
   def actual_quantity
     
-      @deliveries=Delivery.where(:created_at=>(@previous_stock_count.created_at..@present_remaining_item.created_at))
+    @deliveries=Delivery.where(:created_at=>(@previous_stock_count.created_at..@present_remaining_item.created_at))
     @delivery_quantity=0
     @deliveries.each do |d|
       @delivery_quantity += d.delivery_items.sum(:quantity,:conditions=>{:stock_list_item_id=>@present_remaining_item.stock_list_item_id})
@@ -38,8 +38,8 @@ module ReportsHelper
     return @estimated_usage
   end
   def actual_quantity_from_start
-@deliveries=Delivery.where('created_at <?',@present_remaining_item.created_at)
-      #@deliveries=Delivery.where(:created_at=>(@previous_stock_count.created_at..@present_remaining_item.created_at))
+    @deliveries=Delivery.where('created_at <?',@present_remaining_item.created_at)
+    #@deliveries=Delivery.where(:created_at=>(@previous_stock_count.created_at..@present_remaining_item.created_at))
     @delivery_quantity=0
     @deliveries.each do |d|
       @delivery_quantity += d.delivery_items.sum(:quantity,:conditions=>{:stock_list_item_id=>@present_remaining_item.stock_list_item_id})
@@ -58,7 +58,7 @@ module ReportsHelper
   def difference_worth
     @difference_worth=(@estimated_usage-@actual_usage)*@present_remaining_item.mrp
     unless @total_difference_worth.nil?
-    @total_difference_worth+=@difference_worth
+      @total_difference_worth+=@difference_worth
     else
       @total_difference_worth = @difference_worth
     end
@@ -73,10 +73,26 @@ module ReportsHelper
 
   def icon(i)
     if i<0
-            "<i class='icon-thumbs-down'></i>"
-     elsif i>0
-            "<i class='icon-thumbs-up'></i>"
+      "<i class='icon-thumbs-down'></i>"
+    elsif i>0
+      "<i class='icon-thumbs-up'></i>"
     end
 
+  end
+
+
+  def internal_order_worth
+    @internal_order_worth=0
+    StockListItem.all.each do |stli|
+
+      internal_order_quantity=InternalOrder.sum(:quantity,:conditions=>{:status=>1,:stock_list_item_id=>stli.id})
+      price = DeliveryItem.find(:last,:conditions=>{:stock_list_item_id=>stli.id}).mrp
+
+      unless internal_order_quantity.nil? && price.nil?
+
+        @internal_order_worth+= internal_order_quantity * price
+    end
+    return @internal_order_worth
+  end
   end
 end

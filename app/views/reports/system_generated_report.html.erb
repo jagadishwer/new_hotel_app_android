@@ -1,0 +1,99 @@
+
+
+
+
+  <table class="table table-bordered "style="border:1px solid rgb(221,221,221)">
+     <caption class="btn-danger"> <h3 style="text-align:left;color:white;font-variant:small-caps;font-family:fantasy;margin-left:20px;">Report Generated based on Stock checks done by Authorize Staff </h3>
+<%=Date.today%>
+<%#=link_to "save as PDF",{:action=>'inventory_pdf',:format=>'pdf',:end_date=>@ed,:start_date=>@sd},:target=>'_blank',:class=>'btn btn-success'%><br/><br/>
+</caption>
+   
+         <tr><td>Customer count</td>
+            <td> <%=Customer.count(:conditions=>{:date_of_transcation=>(@sd..@ed)})%></td>
+          </tr>
+        <tr><td>NET SALES</td>
+            <td><%=Customer.sum(:total,:conditions=>{:status=>2,:date_of_transcation=>(@sd..@ed)})%>
+           </td>
+           </tr>
+
+
+
+
+           <tr style="background-color:blanchedalmond; "><td>Payments To Suppliers (Rs)</td>
+            <td><%=DeliveryItem.sum(:mrp, :conditions=>{:payment_status=>1,:updated_at=>(@sd..@ed)})%></td>
+            </tr>
+
+        <tr style="background-color:blanchedalmond; "><td>Salaries (Rs)</td>
+            <td><%=Salary.sum(:net_payable,:conditions=>{:created_at=>(@sd..@ed)})%></td>
+           </tr>
+
+        <tr style="background-color:blanchedalmond; "><td>Other Expenditures (Rs)</td>
+            <td><%=PaidOut.sum(:amount,:conditions=>{:created_at=>(@sd..@ed)})%></td>
+           </tr>
+
+        <tr style="background-color:blanchedalmond; "><td>BALANCE AMOUNT (Rs)</td>
+            <td><%=Customer.sum(:total,:conditions=>{:status=>2,:date_of_transcation=>(@sd..@ed)})-DeliveryItem.sum(:mrp, :conditions=>{:payment_status=>1,:updated_at=>(@sd..@ed)})-PaidOut.sum(:amount,:conditions=>{:created_at=>(@sd..@ed)})-Salary.sum(:net_payable,:conditions=>{:updated_at=>(@sd..@ed)})%></td>
+          </tr>
+         <tr><td>WORTH OF RAW MATERIAL PURCHASED(Rs)</td>
+            <td><%=Delivery.sum(:cost,:conditions=>{:created_at=>(@sd..@ed)})%></td>
+
+        </tr>
+
+
+
+
+        <tr><td>WORTH OF RAW MATERIAL SPENT (Rs)</td><td><%=internal_order_worth%></td>
+
+
+        </tr>
+
+
+      </table>
+      <p style="background-color: rgb(221, 221, 221);text-align: center;font-weight:bold">SALES REPORT</p>
+<%#*<tr style="background-color: rgb(221, 221, 221);"><td style="text-align: center;font-weight:bold">SALES REPORT</td></tr>%>
+
+<table class="table table-bordered"style="border:1px solid rgb(221,221,221)">
+        <tr style="background-color:blanchedalmond; "> <td>NAME:</td> <td >QUANTITY </td><td>PRICE</td><td>TOTAL SALE</td>
+     </tr>
+     <%if !@items.empty?%>
+<%(@items).each do |i|%>
+        <%#*<td></td>%>
+
+          <tr><td><%=i.item_name%></td>
+            <td><%=i.orderlists.sum(:quantity,:conditions=>{:created_at=>(@sd..@ed)})%></td> <td><%=i.price%> </td><td><%=i.price*i.orderlists.sum(:quantity,:conditions=>{:created_at=>(@sd..@ed)})%></td>
+<%end%>
+          <%end%></tr>
+
+
+
+
+    </table>
+
+
+  <p style="background-color: rgb(221, 221, 221);text-align: center;font-weight:bold">QUANTITY OF ITEM PURCHASED</p>
+
+      <table class="table table-bordered">
+        <%@stlis.each do |item|%>
+          <tr>
+            <td><%=item.name%></td>
+              <td><%=item.delivery_items.sum(:quantity,:conditions=>{:created_at=>(@sd..@ed)})%>
+              </td>
+
+          </tr>
+        <%end%>
+
+      </table>
+  <p style="background-color: rgb(221, 221, 221);text-align: center;font-weight:bold">QUANTITY OF ITEM USED, AS OF SYSTEM</p>
+
+      <table class="table table-bordered">
+        <%@stlis.each do |item|%>
+          <tr>
+            <td><%=item.name%></td>
+
+              <td><%=item.internal_orders.sum(:quantity,:conditions=>{:status=>1,:updated_at=>(@sd..@ed)})%>
+              </td>
+
+          </tr>
+
+        <%end%>
+        </table>
