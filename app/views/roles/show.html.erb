@@ -1,0 +1,6 @@
+<p>Roles</p>
+<% @roles.each do |r| %>
+  <%= r.name %>
+<% end %>
+<br /><br />
+<div><%= link_to_modal "Create New Role", {:controller => 'roles', :action => 'new'}, :class => 'btn-large btn-success'%> </div>

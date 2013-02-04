@@ -1,0 +1,21 @@
+
+
+  <%unless @customers.empty?%>
+
+  <%@customers.each do |c|%>
+  <table class="table table-striped table-bordered">
+    <tr ><td style="background-color: #387038;color: white; ">SERIAL NO</td><td style="background-color: #387038;color: white; "> <%=c.serial_no%></td><td style="background-color: #387038;color: white; "></td></tr>
+  <%c.orders.each do |o|%>
+    
+        <tr><td style="background-color: #387038;color: white; ">Item Name</td><td style="background-color: #387038;color: white; ">Quantity </td><td style="background-color: #387038;color: white; ">Status</td></tr>
+
+  <%o.orderlists.each do |ol|%>
+  <tr><td><%=ol.itemname%></td><td><%=ol.quantity%> </td><td><%=ol.status_info%></td></tr>
+  <%end%>
+
+  <%end%>
+  </table>
+  <%end%>
+
+
+<%end%>

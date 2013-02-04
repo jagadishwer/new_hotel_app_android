@@ -1,0 +1,35 @@
+
+<div style="margin-left: 20px;">
+<h2>Edit User</h2>
+<div style="float:right;margin-right: 20px;">
+  <%= link_to "Back", '/manage_users/index', :class => 'btn-large btn-primary' %>
+</div>
+<%= form_for @user, {:url => '/manage_users/update'} do |f| %>
+  <%= f.hidden_field :id %>
+<ul class ="nav">
+  <li>
+    <%= f.label :email %>
+    <%= f.email_field :email %>
+  </li>
+  <li>
+    <%= f.label :password %>
+    <%= f.password_field :password %>
+  </li>
+  <li>
+    <%= f.label :password_confirmation, "Confirm Password" %>
+    <%= f.password_field :password_confirmation %>
+  </li>
+  <li>
+    <%= f.label :role %>
+    <%= f.select :role_ids, Role.all.collect { |c| [ c.name, c.id ] }, { :include_blank => 'Please select Role' } %>
+  </li>
+  <li>
+    <%= f.label :time_zone%>
+    <%= f.time_zone_select :time_zone, ActiveSupport::TimeZone.us_zones %>
+  </li>
+  <li>
+    <%= f.submit "Update User", :class => 'btn btn-success update_button' %>
+  </li>
+  <% end %>
+</ul>
+</div>

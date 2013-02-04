@@ -1,0 +1,26 @@
+<div class="page-header" style="margin-top: 10px;">
+  <h1 style="text-align:left;color:whitesmoke;font-variant:small-caps;font-family:fantasy;margin-left:20px;">Categories</h1>
+</div>
+<div style="width:800px;height:500px;background-color:white;margin:auto;border:3px solid #333333;border-radius:6px;overflow:scroll;">
+<table class="table table-striped table-bordered">
+  <tr>
+    <th id="table_header"> S.NO</th>
+    <th id="table_header">Category Name</th>
+    <th id="table_header">Created At</th>
+    <th id="table_header"></th>
+  </tr>
+  <%@i=0%>
+<%@categories.each do |s|%>
+
+  <tr>
+    <td><%@i+=1%><%=@i%></td>
+    <td><%=s.name%></td>
+    <td><%=s.created_at.to_date%></td>
+    <td><%=link_to_modal "Edit", {:controller=>'categories',:action=>'edit',:id=>s.id},:class=>"btn-small btn-primary"%></td>
+  </tr>
+
+<%end%>
+</table>
+    <br/>
+    <%=link_to_modal "Add New Category", {:controller=>'categories',:action=>'new'},:class=>"btn-large btn-success"%>
+</div>

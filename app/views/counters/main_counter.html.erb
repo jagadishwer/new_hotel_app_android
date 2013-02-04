@@ -1,0 +1,144 @@
+<script>
+ $(document).ready(function(){
+   $('#card_no').keypad({keypadOnly: false,
+    layout: $.keypad.qwertyLayout});
+ 
+
+
+    $('#refund').click(function(e) {
+    alert("Are you sure? After this action your card balance will be nothing.");
+    //alert(session['card']);
+    if ($('#check').val()==null){
+      alert("Swipe Your Card");
+    }
+    else{
+     var xmlhttp;
+    if (window.XMLHttpRequest)
+    {// code for IE7+, Firefox, Chrome, Opera, Safari
+      xmlhttp=new XMLHttpRequest();
+    }
+    else
+    {// code for IE6, IE5
+      xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    xmlhttp.onreadystatechange=function()
+    {
+      if (xmlhttp.readyState==4 && xmlhttp.status==200)
+      {
+        document.getElementById("myDiv").innerHTML=xmlhttp.responseText;
+      }
+    }
+    xmlhttp.open("GET","/swipeCards/refund",true);
+    xmlhttp.send();
+    }
+  });
+  });
+  function loadXMLDoc()
+  {
+    var xmlhttp;
+    if (window.XMLHttpRequest)
+    {// code for IE7+, Firefox, Chrome, Opera, Safari
+      xmlhttp=new XMLHttpRequest();
+    }
+    else
+    {// code for IE6, IE5
+      xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    xmlhttp.onreadystatechange=function()
+    {
+      if (xmlhttp.readyState==4 && xmlhttp.status==200)
+      {
+        document.getElementById("myDiv").innerHTML=xmlhttp.responseText;
+      }
+    }
+    
+    xmlhttp.open("GET","/swipeCards/card_details?card_no="+$('#card_no').val(),true);
+    xmlhttp.send();
+   
+  }
+
+
+  function card_no(order)
+  {
+
+  order=$('#card_no').val()
+    //alert(order);
+
+    $.ajax({
+      type: "GET",
+      url: "/swipeCards/card_session",
+
+      data: {
+        'id' : order
+      }
+
+    });
+//loadXMLDoc();
+  }
+ function cancel()
+  {
+
+  var xmlhttp;
+    if (window.XMLHttpRequest)
+    {// code for IE7+, Firefox, Chrome, Opera, Safari
+      xmlhttp=new XMLHttpRequest();
+    }
+    else
+    {// code for IE6, IE5
+      xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    xmlhttp.onreadystatechange=function()
+    {
+      if (xmlhttp.readyState==4 && xmlhttp.status==200)
+      {
+        document.getElementById("myDiv").innerHTML=xmlhttp.responseText;
+      }
+    }
+
+    xmlhttp.open("GET","/swipeCards/cancel",true);
+    xmlhttp.send();
+      
+//loadXMLDoc();
+  }
+</script>
+<style>
+  #myDiv1{
+    width: 350px;
+    height: 400px;
+    border:1px solid;
+    margin-top: 50px;
+    margin-left: 0px;
+    
+    
+}
+#myDiv{
+    width: 350px;
+    height: 360px;
+    background-color:whitesmoke;
+
+}
+  
+</style>
+<div style="position:absolute;left:55px">
+<h1>Main Counter</h1>
+</div>
+<div style="float:right;margin-right: 100px;margin-top: 50px;">
+  CARD NUMBER:<%=text_field_tag "card_no" %>
+  <button type="button" class="btn-large btn-info" onclick="loadXMLDoc()">Ok</button>
+</div>
+<br/><br/><br/>
+<div style="position:absolute;left:50px;width:200px;">
+  <ul class="nav nav-pills nav-stacked" style="margin-top:10px;padding:10px">
+  <li><%=link_to_modal 'New Swipe Card', '/swipeCards/new', :class=>"btn-large btn-success"%></li>
+  <li><%=link_to_modal 'Recharge', '/swipeCards/recharge', :class=>"btn-large btn-primary"%></li>
+  <li><%=link_to 'Refund', '#', :id=>'refund',:class=>"btn-large btn-warning"%>
+<%#=link_to_modal 'Refund', '/swipeCards/refund', :class=>"btn-large btn-warning"%></li>
+  </ul>
+</div>
+
+<div id="myDiv1" style ="float:right;margin-right: -350px;">
+  
+  <h4 style="background-color:#999999">CARD DETAILS</h4>
+<div id="myDiv">
+</div>
+</div>

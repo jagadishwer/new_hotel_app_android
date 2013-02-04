@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>HotelApp</title>
+  <%= stylesheet_link_tag    "application", :media => "all" %>
+  <%= javascript_include_tag :defaults, "nested_form" %>
+  <%= javascript_include_tag "application" %>
+  <%= javascript_include_tag  "jquery" %>
+  <%= javascript_include_tag  "jquery.ui.all" %>
+  <%= javascript_include_tag  "jquery.modal" %>
+  <%= javascript_include_tag  "jquery_ujs" %>
+  <%= javascript_include_tag  "jquery_nested_form" %>
+  <%= javascript_include_tag  "jquery.keypad" %>
+  <%= stylesheet_link_tag "jquery.keypad"%>
+  <%= stylesheet_link_tag "custom_css.css"%>
+  <%= csrf_meta_tags %>
+</head>
+<style>
+  .btn-large{
+    height:30px;
+  }
+  .main_body{
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+    background-color: #5bb65b;
+    background-image: -moz-linear-gradient(top, #62c462, #51a351);
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#62c462), to(#51a351));
+    background-image: -webkit-linear-gradient(top, #62c462, #51a351);
+    background-image: -o-linear-gradient(top, #62c462, #51a351);
+    background-image: linear-gradient(to bottom, #62c462, #51a351);
+    background-repeat: repeat-x;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff62c462', endColorstr='#ff51a351', GradientType=0);
+    /*border-color: #51a351 #51a351 #387038;
+    border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) fadein(rgba(0, 0, 0, 0.1), 15%);
+    *background-color: #51a351;
+    Darken IE7 buttons by default so they stand out more given they won't have borders */
+    filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
+
+      
+      font-family:fantasy;
+
+    }
+    .main_body.table{
+      font-family:monospace;
+      font-weight:900;
+}
+
+
+
+</style>
+<body class="main_body">
+  <div style="background-color:black;height:150px;margin-top: -1.7%;">
+    <h3 style="text-align:left;line-height: 220px;color:whitesmoke;font-variant:small-caps;font-family:fantasy;margin-left:20px;font-size: 35px;">Brilliance-works Hotel App-ANDROID</h3>
+  </div>
+  <div class="container-fluid" style="height:auto;">
+    <div class="row-fluid" style="height:auto;margin-top: 30px;">
+      <div class="span2" style="height:auto; border-radius:10px; background-color: whitesmoke;margin-top: 15px;">
+      <!--Sidebar content-->
+      <%if user_signed_in?%>
+      <ul class="nav nav-pills nav-stacked" style="margin-top:0px;padding:10px">
+        <li><%=link_to "Dashboard",'/hotelsessions/dashboard',:class=>"btn-large btn-warning"%></li>
+        <li><%=link_to "Paid Out", {:controller=>'paid_outs',:action=>'show'},:class=>'btn-large btn-success'%></li>
+        
+        <li><%=link_to_modal "Tables", '/tables/new',:class=>'btn-large btn-info'%></li>
+        
+        <li><%=link_to "Menu",'/hotelsessions/menu',:class=>'btn-large btn-success'%></li>
+         <li><%=link_to "Billing",'/hotelsessions/billing',:class=>"btn-large btn-info"%></li>
+         <li><%=link_to "Kitchens",'/kitchens/kitchen',:class=>"btn-large btn-success"%></li>
+        <li><%=link_to "Inventory",'/hotelsessions/check_inventory',:class=>"btn-large btn-info"%></li>
+        <li><%=link_to "Reports",'/reports/show',:class=>"btn-large btn-success"%></li>
+        <li><%=link_to "Analysis",'/reports/analysis',:class=>"btn-large btn-info"%></li>
+        <li><%=link_to "Administration","/hotelsessions/settings" ,:class=>"btn-large btn-primary"%></li>
+        <li><%#=link_to "Counters",'/counters/counters',:class=>"btn-large btn-info"%></li>
+        <li><%#=link_to "Tax", '/taxes/show',:class=>'btn-large btn-success'%></li>
+        <li> <%= link_to "Sign out", destroy_user_session_path, :method => :delete,:class=>"btn-large btn-danger" %></li>
+       
+        <li>
+          <%#=link_to "Main Counter",'/counters/main_counter',:class=>"btn-small btn-info" %>
+          <%#=link_to "Other Counter",'/counters/other_counter',:class=>"btn-small btn-info" %>
+        </li>
+        <li><%#=link_to_modal "Tables", '/tables/new',:class=>'btn-large btn-info'%></li>
+        <li><%#=link_to "Items",'/items/show',:class=>'btn-large btn-info'%></li>
+        <%#=link_to "Add Tax", {:controller=>'tables',:action=>'new'},:class=>'btn btn-warning'%>
+        
+        <li><%#=link_to "Day Report",'/hotelsessions/day_report',:class=>"btn-large btn-success"%></li>
+        <li><%#=link_to "Inventory",'/hotelsessions/inventory',:class=>"btn-large btn-info"%></li>
+        <li><%#= link_to "Manage Users", '/manage_users/index', :class => "btn-small btn-primary"%> </li>
+        <li><%#= link_to "Manage Roles", '/roles/show', :class => "btn-small btn-primary"%> </li>
+        
+        <li><%#=link_to "Gallery",'/galleries/show',:class=>"btn-large btn-info"%></li>
+        <li><%#=link_to "About us",'/abouts/show',:class=>"btn-large btn-success"%></li>
+        <li><%#=link_to "Contact us",'/contacts/show',:class=>"btn-large btn-info"%></li>
+        
+
+ <li><%#m=link_to "Kitchen",'/hotelsessions/show',:class=>"btn-large btn-success"%></li>
+   
+    
+         <%#*<li>&nbsp;</li>%>
+        <%#*<li><%#= link_to "API Description", '/pages/api', :class => "btn-large btn-primary" </li>%>
+      </ul>
+      <%end%>
+    </div>
+    <div class="span10" style="height:auto;border:0px solid orange;">
+      <!--Body content-->
+      <%= render 'layouts/messages' %>
+      <%= yield %>
+    </div>
+    <%#= debug params if Rails.env.development? %>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,29 @@
+<div style="background-color:white;margin:auto;border:3px solid #333333;overflow:scroll;">
+<table class="table table-hover"style="border:1px solid rgb(221,221,221);margin:auto; ">
+  <tr style="background-color:#ffcccc">
+    <td> S.NO</td>
+    <td>Created At</td>
+    <td>Item_name</td>
+     <td>Units</td>
+     <td>MRP</td>
+     <td>Cost</td>
+
+    <td></td>
+  </tr>
+  <%@i=0%>
+<%@delivery.each do |s|%>
+
+  <tr>
+    <td><%@i+=1%><%=@i%></td>
+   <td><%=s.created_at%></td>
+    <td><%=s.item_name%></td>
+     <td><%=s.quantity%></td>
+     <td><%=s.mrp%></td>
+     <td><%=s.quantity*s.mrp%></td>
+  </tr>
+
+<%end%>
+</table>
+    <br/>
+   
+</div>

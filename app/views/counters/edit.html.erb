@@ -1,0 +1,6 @@
+<%= form_for @counter, {:url => '/counters/update'} do |f| %>
+  <%=f.hidden_field :id%>
+  <%= f.label :name %>
+  <%= f.text_field :name %></br>
+  <%= f.submit "Update" %>
+<% end %>

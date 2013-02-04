@@ -1,0 +1,80 @@
+.jheading{
+
+      font-size:60px;
+      font-weight:bold;
+      width:300px;
+      border-right:none;
+      padding: 55px;
+      float:left;
+  }
+.settings_buttons{
+      height: 110px;
+       width: 650px;
+       float: left;
+       padding: 10px;
+
+}
+.jbtn{
+color: white;
+text-shadow: 0px -1px 0px rgba(0, 0, 0, 0.25);
+background-color: rgb(218, 78, 73);
+background-image: -moz-linear-gradient(center top , rgb(238, 95, 91), rgb(189, 54, 47));
+background-repeat: repeat-x;
+border-color: rgb(189, 54, 47) rgb(189, 54, 47) rgb(128, 36, 32);
+padding: 20px;
+width:100px;
+font-size: 17.5px;
+border-radius: 5px 5px 5px 5px;
+line-height:   100px;
+margin-left: 20px;
+
+}
+.main_div{
+  margin-top: 150px;
+  margin-left: 40px;
+  margin-right: 40px;
+  margin-bottom: 20px;
+  border: 0px solid;
+  height: 600px;
+}
+.edit_button{
+    width: 110px;
+    height: 40px;
+    padding: 10px;
+}
+.update_button{
+    width: 100px;
+    height: 50px;
+    padding: 10px;
+    
+}
+.back_button{
+    width: 70px;
+    height: 35px;
+    margin-left: 20px;
+    margin-bottom: 10px;
+    padding: 20px;
+}
+#card_no{
+  height: 30px;
+}
+
+#error_explanation {
+  color: #f00;
+}
+#error_explanation ul{
+    list-style: none;
+    margin: 0 0 18px 0;
+  }
+.notice:empty {
+  display: none;
+ }
+ #table_header{
+     background-color:#387038;
+     color: white;
+     font-variant:small-caps;
+     font-family:fantasy;
+}
+#table_header>a {
+    color: white;
+}

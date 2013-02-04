@@ -1,0 +1,25 @@
+<%#*used custom_css file for css%>
+<%#*<div class="jheading" style ="float: none;padding:30px;width: 100%;padding-left: 40px;">Administration</div>%>
+<div class="page-header"style="margin-top: 10px;">
+    <h1 style="text-align:left;color:whitesmoke;font-variant:small-caps;font-family:fantasy;margin-left:20px;">Administration</h1>
+</div>
+<div class="settings_buttons" style ="width: 100%">
+<%= link_to "Users", '/manage_users/index', :class => "jbtn"%>
+  <%= link_to "      HR   ", '/hotelsessions/hr', :class => "jbtn"%>
+  
+  <%=link_to "Gallery",'/galleries/show',:class=>"jbtn"%>
+<%=link_to "About us",'/abouts/show',:class=>"jbtn"%>
+<%=link_to "Contact us",'/contacts/show',:class=>"jbtn"%>
+  <%#= link_to "API Description", '/pages/api', :class => "jbtn" %>
+  <%#= link_to "Payments Due", '/reports/payments_due', :class => "jbtn" %>
+
+  <%#= link_to "Employees", '/employees/show', :class => "jbtn"%>
+  <%#= link_to "Attendance", '/attendances/index', :class => "jbtn"%>
+  <%#= link_to "Payroll", "/salaries/index", :class => "jbtn"%>
+<%#*<li><%= link_to "Manage Roles", '/roles/show', :class => "btn-small btn-primary"% </li>%>
+<%#=link_to "Settings",edit_user_registration_path ,:class=>"jbtn"%>
+</div>
+<%#*Required AJAX code here..%>
+<div class ="main_div">
+  <p></p>
+</div>

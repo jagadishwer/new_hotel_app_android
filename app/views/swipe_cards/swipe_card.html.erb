@@ -1,0 +1,11 @@
+<div style ="margin-left: 20px;margin-top: 30px;">
+<%unless session[:card].nil?%>
+  Card Balance <%=@card.balance%>
+  <%=hidden_field_tag :check, session[:card]%>
+  <button type="button" class="btn" onClick="cancel()">Cancel</button>
+<%else%>
+  <h4>Swipe your card</h4>
+  <%=text_field_tag "card_no"%>
+  <button type="button" class="btn btn-mini btn-info" onClick="swipe_card()"><h5>OK</h5></button>
+<%end%>
+</div>

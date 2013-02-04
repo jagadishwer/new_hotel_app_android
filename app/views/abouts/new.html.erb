@@ -1,0 +1,8 @@
+
+<%= form_for @aboutus, :url => '/abouts/create' do |f| %>
+  <%= f.label :title %>
+  <%= f.text_field :title %>
+  <%= f.label :description %>
+  <%= f.text_area :description %></br>
+  <%= f.submit "Create" %>
+<% end %>

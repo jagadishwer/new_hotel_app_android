@@ -1,0 +1,23 @@
+<style>
+  .new_gallery{
+    height:400px;
+    overflow: scroll;
+}
+</style>
+
+<%= nested_form_for @gallery, :url => '/galleries/create', :html => {:multipart => true} do |f| %>
+  <%= f.label :title %>
+  <%= f.text_field :title %>
+  <%= f.label :description %>
+  <%= f.text_area :description, :size=>'20x20'%><br/>
+  <%= f.fields_for :images do |attachment_form|  %>
+
+    <p>
+    <%= attachment_form.label :photo %><br />
+    <%= attachment_form.file_field :photo %>
+    </p>
+    <%= attachment_form.link_to_remove "Remove this attachment" %>
+  <% end %>
+  <%= f.link_to_add "Add attachment", :images %>
+  <p><%= f.submit %></p>
+<% end %>

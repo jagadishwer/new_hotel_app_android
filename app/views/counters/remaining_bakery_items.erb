@@ -1,0 +1,13 @@
+<h4>Remaining Counter Items</h4>
+<%unless @items.nil?%>
+<table class="table table-bordered">
+<%@items.each do |i|%>
+
+   <tr>
+     <td><%=i.item_name%>: </td><td><%=i.counter_orders.sum(:quantity,:conditions=>{:status=>1})-i.orderlists.sum(:quantity)%></td>
+   </tr>
+
+
+<%end%>
+   </table>
+<%end%>

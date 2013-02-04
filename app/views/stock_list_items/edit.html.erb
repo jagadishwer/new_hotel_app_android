@@ -1,0 +1,6 @@
+<%= form_for @stock_list_item, :url => '/stock_list_items/update' do |f| %>
+  <%= f.hidden_field :id %>
+  <%= f.label :name %>
+  <%= f.text_field :name %>
+  <%= f.submit "Update" %>
+<% end %>

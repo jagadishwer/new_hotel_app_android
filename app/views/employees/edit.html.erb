@@ -1,0 +1,23 @@
+<h1>Employees#edit</h1>
+
+<%= form_for @employee, {:url=>'/employees/update' } do |f| %>
+  <%=f.hidden_field :id%>
+<div class="form-inputs">
+  <%= f.label :first_name %>
+  <%= f.text_field :first_name %>
+
+  <%= f.label :last_name %>
+  <%= f.text_field :last_name %>
+  <%= f.label :position %>
+  <%= f.select :position_id, @positions.collect { |p| [ p.name, p.id ] }, { :prompt => "Select Position" } %>
+
+  <%= f.label :branch %>
+  <%=f.select :branch_id, @branches.collect{|p| [p.name,p.id]},{:prompt=> "Select Branch"}%>
+
+</div>
+<div class="form-actions">
+  <%= f.submit "Sign up" %>
+</div>
+
+<% end %>
+

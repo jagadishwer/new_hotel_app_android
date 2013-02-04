@@ -1,0 +1,46 @@
+<div class="page-header"style="margin-top: 10px;">
+    <h1 style="text-align:left;color:whitesmoke;font-variant:small-caps;font-family:fantasy;margin-left:20px;">Delivered Item Entry</h1>
+</div>
+<%= nested_form_for @stock_list_item,:url=>'/delivery_items/create',:html => { :multipart => true } do |f| %>
+<%= render "/shared/error_messages", :target => f.object %>
+<div style="width:800px;height:500px;background-color:white;margin:auto;border:0px solid #333333;overflow:scroll;border-radius:6px;">
+<table class="table table-striped table-bordered">
+  <tr>
+    <th id="table_header">Name</th>
+    <th id="table_header">MRP per Unit (Rs)</th>
+    <th id="table_header">Units</th>
+    <th id="table_header">Supplier</th>
+  </tr>
+<%@stlis.each do |s|%>
+  <tr>
+    <td><%=label :delivery, "#{s.name}[name]",s.name%></td>
+    <td><%=text_field_tag "#{s.name}[mrp]"%></td>
+    <td><%=text_field_tag "#{s.name}[quantity]"%></td>
+     <td><%=select_tag"#{s.name}[supplier_id]", options_from_collection_for_select(@suppliers, :id,:name),:prompt => "Select Supplier" %></td>
+  </tr>
+<%end%>
+</table>
+</div>
+<%#*<div style="width:800px;height:100px;background-color:white;margin:auto;border:3px solid black;border-top:none;border-bottom: none; overflow:scroll;">%>
+  
+  <%#*<table class="table table-hover" style="border:1px solid rgb(221,221,221);margin:auto; ">%>
+    <%#*<tr style="background-color:#999999">%>
+      <%#*<td>Items newly Added:</td><td></td><td></td>%>
+    <%#*</tr><tr>%>
+      <%#= f.fields_for :delivery_items do |task_form| %>
+   <%#*<td><%=task_form.text_field  :item_name,:style=>"width:110px;height:20px"%</td>%>
+    <%#*<td><%=task_form.text_field  :mrp,:style=>"width:50px;height:20px;"%</td>%>
+    <%#*<td><%=task_form.text_field  :quantity, :style=>"width:50px;height:20px"%</td>%>
+    <%#*<td><%= task_form.link_to_remove "Remove" %</td>%>
+<%# end %>
+<%#*<p><%= f.link_to_add "Add a task", :delivery_items%</p>%>
+
+
+ 
+  
+    <%#*</tr></table>%>
+<%#*</div>%>
+<div style="width:800px;height:60px;background-color:#999999;margin:auto;border:0px solid black;border-top:none;">
+  <%=f.submit "Submit", :class=>"btn-small btn-primary" ,:style=>"float:right;margin-right:30px;margin-top:1px;margin-bottom:1px;height:55px;width:120px;"%>
+</div>
+<%end%>

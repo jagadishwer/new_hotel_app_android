@@ -1,0 +1,28 @@
+<div class ="page-header" style ="margin-top: 10px;">
+  <h1 style="text-align:left;color:whitesmoke;font-variant:small-caps;font-family:fantasy;margin-left:20px;">Suppliers</h1>
+</div>
+<div style="width:800px;height:500px;background-color:white;margin:auto;border:3px solid #333333;border-radius:6px;overflow:scroll;">
+  <table class ="table table-striped table-bordered">
+<%#*<table class="table table-hover"style="border:1px solid rgb(221,221,221);margin:auto; ">%>
+    <tr>
+  <%#*<tr style="background-color:#ffcccc">%>
+    <th style="background-color:rgb(0, 108, 204);color: white;"> S.NO</th>
+    <th style="background-color:rgb(0, 108, 204);color: white;">COMPANY NAME</th>
+    <th style="background-color:rgb(0, 108, 204);color: white;">CONTACT PERSON</th>
+    <th style="background-color:rgb(0, 108, 204);color: white;"></th>
+  </tr>
+  <%@i=0%>
+<%@supplier.each do |s|%>
+
+  <tr>
+    <td><%@i+=1%><%=@i%></td>
+    <td><%=s.name%></td>
+    <td><%=s.contact_name%></td>
+    <td><%=link_to_modal "Edit", {:controller=>'suppliers',:action=>'edit',:id=>s.id},:class=>"btn-small btn-success"%></td>
+  </tr>
+
+<%end%>
+</table>
+    <br/>
+    <%=link_to_modal "Add New suppliers", {:controller=>'suppliers',:action=>'new'},:class=>"btn-large btn-success"%>
+</div>

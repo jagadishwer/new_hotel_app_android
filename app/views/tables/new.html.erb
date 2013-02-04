@@ -1,0 +1,8 @@
+<% if !@p_table.nil? %>
+<h3>You Got <%=@p_table.table_name%> tables. Enter number of Table you would like to Add More.</h3>
+ <%end%>
+<%= form_for @table, { :url => "/tables/create" } do |f| %>
+  <%= f.label :no_of_tables %>
+  <%= f.text_field :no_of_tables %>
+  <%= f.submit %>
+<% end %>

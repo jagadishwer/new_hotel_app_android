@@ -1,0 +1,38 @@
+<style>
+.sbtn{
+  height: 60px;
+  width: 80px;
+}
+</style>
+
+<div style ="margin-left: 30px;">
+  <div class ="form-actions">
+  <h2>New User</h2>
+  </div>
+
+  <%= form_for @user, {:url => '/manage_users/create'} do |f| %>
+  <div class ="form_inputs">
+    <%= f.label :email %>
+    <%= f.email_field :email %>
+  
+  
+    <%= f.label :password %>
+    <%= f.password_field :password %>
+  
+  
+    <%= f.label :password_confirmation, "Confirm Password" %>
+    <%= f.password_field :password_confirmation %>
+  
+    <%= f.label :role_ids, "Role" %>
+    <%= f.select :role_ids, Role.all.collect { |c| [ c.name, c.id ] }, { :include_blank => 'Please select Role' } %>
+  
+    <%= f.label :time_zone, "Time Zone" %>
+    <%= f.time_zone_select :time_zone, ActiveSupport::TimeZone.us_zones %>
+  </div>
+  <div class ="form-actions">
+  
+    <%= f.submit "Create User", :class => 'btn-large btn-primary sbtn' %>
+  </div>
+  
+<% end %>
+</div>

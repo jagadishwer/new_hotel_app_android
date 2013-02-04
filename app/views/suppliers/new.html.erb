@@ -1,0 +1,9 @@
+<%= form_for @supplier, {:url=>"/suppliers/create"} do |f| %>
+  <%= f.label :Company_name %>
+  <%= f.text_field :name %></br>
+   <%= f.label :contact_person %>
+  <%= f.text_field :contact_name %></br>
+  <%= f.label :description %>
+  <%= f.text_area :description, :cols => 20, :rows => 10 %></br>
+  <%= f.submit %>
+<% end %>

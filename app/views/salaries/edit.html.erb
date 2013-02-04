@@ -1,0 +1,143 @@
+<h1>Salary for <%= Time.now.month%> / <%= Time.now.year%></h1>
+<script>
+  $('document').ready(function(){
+  $('form').submit(function(){
+
+return flase;
+    if($('#salary_target_year').val()=="")
+      {
+        alert("Please Select Target Year");
+        return false;
+      }
+     if($('#salary_target_month').val()==""){
+        alert("Please Select Target Month");
+        return false;
+      }
+      if($('#salary_employee_id').val()==""){
+        alert("Please Select Employee Name");
+    return false;
+      }
+      if($('#salary_working_days').val()==""){
+        alert("Please Select Employee Name");
+    return false;
+      }
+
+
+  });
+  });
+  function basic_salary(){
+     if($('#salary_working_days').val()==""){
+        alert("Please Select Employee Name");
+
+      }
+     var wds =parseFloat($('#salary_working_days').val()) || 0;
+     var dr= parseFloat($('#salary_day_rate').val()) || 0;
+      $("#salary_basic_salary").val(wds*dr);
+      net_total_pay();
+
+  }
+function net_total_pay(){
+  var travel_expence=parseFloat($("#salary_travel_expense").val()) ||0;
+  var other_expence=parseFloat($("#salary_other_expense").val()) ||0;
+  var other_decuction=parseFloat($("#salary_other_decuction").val()) || 0;
+  var basic_salary =parseFloat($("#salary_basic_salary").val()) ||0;
+  var total_payable=basic_salary + travel_expence + other_expence;
+  var net_payable= basic_salary + travel_expence + other_expence - other_decuction;
+  //alert(travel_expence);
+  //alert(other_expence);
+  //alert(total_payable);
+  //alert(net_payable);
+  $("#salary_total_payable").val(total_payable);
+  $("#salary_net_payable").val(net_payable);
+
+}
+
+function getwork_days()
+  {
+    if($('#salary_target_year').val()=="")
+      {
+        alert("Please Select Target Year");
+        return false;
+      }
+     if($('#salary_target_month').val()==""){
+        alert("Please Select Target Month");
+        return false;
+      }
+      if($('#salary_employee_id').val()==""){
+        alert("Please Select Employee Name");
+        return false;
+      }
+
+
+    var xmlhttp;
+    if (window.XMLHttpRequest)
+    {// code for IE7+, Firefox, Chrome, Opera, Safari
+      xmlhttp=new XMLHttpRequest();
+    }
+    else
+    {// code for IE6, IE5
+      xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    xmlhttp.onreadystatechange=function()
+    {
+      if (xmlhttp.readyState==4 && xmlhttp.status==200)
+      {
+        document.getElementById("salary_working_days").value=xmlhttp.responseText;
+
+
+      }
+    }
+
+    xmlhttp.open("GET","/salaries/get_attendance?employee_id="+$('#salary_employee_id').val()+"&target_year="+$('#salary_target_year').val()+"&target_month="+$('#salary_target_month').val(),true);
+    xmlhttp.send();
+
+  }
+
+
+</script>
+
+
+<%= form_for @salary, {:url=>'/salaries/update'} do |f| %>
+<%=f.hidden_field :id%>
+<div class="form-inputs" >
+<div class="row" style="margin-left:100px">
+	  <div class="span12">
+		  <div class="row">
+			 <div class="span6">
+                           <%=f.label :target_year%>
+			    <%= f.select :target_year,2012..2030, :prompt => "Select year" %>*
+<%=f.label "employee" %>
+  <%= f.select :employee_id, @employees.collect { |p| [ p.first_name, p.id ] }, { :prompt => "Choose Employee" } %>*
+			    <%=f.label :day_rate %>
+  <%= f.text_field :day_rate,:onchange=>"basic_salary()" %>
+
+			    <%=f.label :travel_expense%>
+  <%= f.text_field :travel_expense,:onchange=>"net_total_pay()" %>
+			    <%=f.label :other_expense%>
+  <%= f.text_field :other_expense,:onchange=>"net_total_pay()" %>
+			    <%=f.label :total_payable %>
+  <%= f.text_field :total_payable %>
+			</div>
+			<div class="span6">
+<%=f.label :target_month%>
+  <%= f.select :target_month, 1..12, :prompt => "Select year" %>*
+<%=f.label :working_days%>
+  <%= f.text_field :working_days,:onfocus=>"getwork_days()", :onchange=>"basic_salary()" %>
+     <%=f.label :basic_salary%>
+  <%= f.text_field :basic_salary,:onchange=>"net_total_pay()" %>
+
+			    <%#= f.text_field :cash_advance %>
+<%=f.label :other_decuction%>
+  <%= f.text_field :other_decuction,:onchange=>"net_total_pay()" %>
+<%=f.label :net_payable%>
+  <%= f.text_field :net_payable %>
+		     </div>
+		  </div>
+      </div>
+  </div>
+<div class="form-actions">
+
+  <%= f.submit "Sumbit" %>
+</div>
+</div>
+<% end %>

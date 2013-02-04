@@ -1,0 +1,15 @@
+<% if target.errors.any? %>
+  <div id="error_explanation">
+    <div class="alert alert-error">
+      <h5><%= pluralize(target.errors.count, "Error") %></h5>
+    
+    <p>
+      There were problems with the following fields:</p>
+    <ol>
+      <% target.errors.full_messages.each do |msg| %>
+      <li><%= msg %></li>
+      <% end %>
+    </ol>
+    </div>
+  </div>
+<% end %>

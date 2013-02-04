@@ -1,0 +1,35 @@
+
+
+<%unless @remaining_items.nil?%>
+
+   <div style="width:800px;height:500px;background-color:white;margin:auto;border:3px solid #333333;border-radius:6px;overflow:scroll;">
+    <table class="table table-striped table-bordered">
+      <tr>
+        <th id="table_header">Item Name</th>
+        <th id="table_header">Estimated Usage</th>
+        <th id="table_header">Actual Usage</th>
+        <th id="table_header">Difference</th>
+        <th id="table_header">Difference Worth</th>
+      </tr>
+      <%@i=0%>
+      <% @remaining_items.each do |s| %>
+        <tr>
+
+          <td><%=s.name%></td>
+
+          <td><%= estimated_quantity(s)%></td>
+          <td><%=actual_quantity%></td>
+          <td><%x= difference%><%=x%> <%=raw(icon(x))%></td>
+          <td>Rs <%y= difference_worth%><%=y%> <%=raw(icon(y))%></td>
+        </tr>
+      <%  end %>
+         <td></td><td></td><td></td><td id="table_header">TOTAL:</td><td id="table_header">Rs <%z=total_difference_worth%><%=z%> <%=raw(icon(z))%></td>
+    </table>
+
+  </div>
+<div style="margin: 30px;margin-left: 110px;font-size:18px;color:#996600; ">Note: This analysis is based on last stock check done (i.e <%=@sc.created_at.to_date%>)and Previous stock check(i.e <%=@previous_stock_count.created_at.to_date%>) . Here, Estimated Usage is calculated based on recipes. Actual Usage is what actual spent from purchase.</div>
+ 
+
+
+
+<%end%>

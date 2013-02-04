@@ -1,0 +1,147 @@
+<script>
+  $(function() {
+  $('.datepicker1').datepicker({dateFormat: 'dd-mm-yy'});
+
+});
+
+</script>
+
+
+<%#*<script>%>
+  <%#*function view(order)%>
+  <%#*{%>
+<%#*//alert(order);%>
+
+    <%#*var xmlhttp;%>
+    <%#*if (window.XMLHttpRequest)%>
+    <%#*{// code for IE7+, Firefox, Chrome, Opera, Safari%>
+      <%#*xmlhttp=new XMLHttpRequest();%>
+    <%#*}%>
+    <%#*else%>
+    <%#*{// code for IE6, IE5%>
+      <%#*xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");%>
+    <%#*}%>
+    <%#*xmlhttp.onreadystatechange=function()%>
+    <%#*{%>
+      <%#*if (xmlhttp.readyState==4 && xmlhttp.status==200)%>
+      <%#*{%>
+        <%#*document.getElementById("myDiv").innerHTML=xmlhttp.responseText;%>
+      <%#*}%>
+    <%#*}%>
+    <%#*xmlhttp.open("POST","receipt",true);%>
+    <%#*xmlhttp.send();%>
+    <%#*//setTimeout("loadXMLDoc()", 1000);%>
+  <%#*}%>
+
+  <%#*You need to sign in or sign up before continuing.%>
+
+<%#*</script>%>
+
+<style>
+  select {
+width: 70px;
+border: 1px solid #CCC;
+background-color: white;
+}
+#my_button{
+  height: 100px;
+  width: 100px;
+}
+</style>
+
+
+
+<div class="page-header" style="margin-top:10px;">
+  <h1 style="text-align:left;color:whitesmoke;font-variant:small-caps;font-family:fantasy;margin-left:20px;">Dashboard</h1>
+</div>
+
+<div style="width:40%;height:800px; background-color:rgb(252, 248, 227);margin-bottom: 50px;float: left;margin-left:30px;overflow:scroll;border-radius:20px;border:10px solid rgb(218, 235, 169);">
+
+
+
+
+      <table class="table table-bordered">
+        <tr style="background-color: #387038;color: white; "> <td>SERIAL NO:</td> <td >TABLE: </td><td>DATE</td><td>TOTAL</td>
+          <%#*<td></td>%>
+        </tr>
+        <%@customers.each do |customer|%>
+          
+        <tr style="background-color:whitesmoke; "><td><%=customer.serial_no%></td><td><%=customer.table.table_name%></td><td><%=customer.date_of_transcation%></td><td><%=customer.total%></td>
+          <%#*<td> <button type="button" class="btn-small btn-info" onclick="view(<%=order.id%)">view</button></td>%>
+        </tr>
+       
+      
+        <%end%>
+        <tr style="background-color:#cccccc; "><td></td><td>TOTAL</td><td></td><td><%=Customer.sum(:total,:conditions=>{:status=>2,:date_of_transcation=>Date.today})%></td>
+        </tr>
+      </table>
+</div>
+<div id="myDiv"style="width:50%;height:800px;background-color:rgb(252, 248, 227);float: left;margin-left:30px;overflow:scroll;border-radius:20px;border:10px solid rgb(218, 235, 169); ">
+  
+<%#*<div style="margin:50px 100px 50px 100px;">%>
+<%#=link_to_modal "Add Tables", {:controller=>'tables',:action=>'new'},:class=>'btn btn-warning'%>
+<%#=link_to_modal "Add Tax", '#',:class=>'btn btn-warning'%>
+<%#=link_to_modal "Add Category", {:controller=>'categories',:action=>'new'},:class=>'btn btn-warning'%>
+<%#=link_to_modal "Add Items", {:controller=>'items',:action=>'new'},:class=>'btn btn-warning'%>
+<%#=link_to "Add Tax", {:controller=>'tables',:action=>'new'},:class=>'btn btn-warning'%>
+  
+<%#*</div>%>
+  <div>
+  <%=form_for :sorting, :url=>"dashboard" do%>
+  <div style ="margin-left: 30px; width:250px;margin-top: 10px;">
+    <h1 style="text-align:left;color:#387038;font-variant:small-caps;font-weight:bolder; font-family:fantasy;margin:50px 100px"> Transactions:</h1>
+
+    
+      <%= label_tag  'start Date'%>
+      <%= text_field_tag 'sorting[start_date]',nil, :class => 'datepicker1'%>
+    
+      <%= label_tag 'end Date' %>
+      <%= text_field_tag 'sorting[end_date]',nil, :class => 'datepicker1'%>
+    </div>
+   <div style ="float: right;margin-right:  130px;margin-top: -105px;">
+   <%=  submit_tag "OK",:class=>'btn-large btn-success', :id => 'my_button'%>
+   <%end%>
+   </div>
+  </div>
+  
+  <%if !@sorted_customers.nil?%>
+  <br><br><br><br><br>
+ 
+    <table class="table table-bordered">
+        <tr style="background-color:#ffcccc; "> <td>SERIAL NO:</td> <td >TABLE: </td><td>DATE</td><td>TOTAL</td>
+          <%#*<td></td>%>
+
+        </tr>
+
+        <%@sorted_customers.each do |customer|%>
+
+        <tr style="background-color:whitesmoke; "><td><%=customer.serial_no%></td><td><%=customer.table.table_name%></td><td><%=customer.date_of_transcation%></td><td><%=customer.total%></td>
+          <%#*<td> <button type="button" class="btn-small btn-info" onclick="view(<%=order.id%)">view</button></td>%>
+        </tr>
+
+
+        <%end%>
+        <tr style="background-color:#cccccc; "><td></td><td>TOTAL</td><td></td><td><%=Customer.sum(:total,:conditions=>{:status=>2,:date_of_transcation=>[@sd..@ed]})%></td>
+        </tr>
+      </table>
+  
+ <%@a=[];@l=[]%>
+ <%@a<<0;@l<<0%>
+ <%(@sd..@ed).each do |x|%>
+<%t=Customer.sum(:total,:conditions=>{:status=>2,:date_of_transcation=>x})%>
+ <%if t!=0%>
+    <%@l<<x;@a<<t%>
+ <%end%>
+ <%end%>
+<%=image_tag Gchart.line(:title => 'sales',:bar_colors => 'FF0000,00FF00',
+              :data => @a,:axis_with_labels => ["x","y"],:axis_labels => [@l,@a] )%>
+ <%#=image_tag Gchart.line()%>
+  <br><br>
+  <div class="row-fluid">
+   <div class ="span4 offset4">
+<%=link_to "Save as PDF",{:action=>'sales',:format=>'pdf',:end_date=>@ed,:start_date=>@sd},:target=>'_blank',:class=>'btn-large btn-info'%><br/><br/>
+   </div>
+  </div>
+  <%end%>
+</div>
+  

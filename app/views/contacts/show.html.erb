@@ -1,0 +1,19 @@
+<div class="page-header" style="margin-top: 10px;">
+  <h1 style="text-align:left;color:whitesmoke;font-variant:small-caps;font-family:fantasy;margin-left:20px;">Contact us</h1>
+</div>
+<div style="width:800px;height:500px;background-color:white;margin:auto;border:3px solid #333333;overflow:scroll;">
+  <% if @contactus.empty? %>
+    <p>No Content is added to Contact us page!</p>
+    <%=link_to_modal "Add Content", {:controller=>'contacts',:action=>'new'},:class=>"btn-large btn-primary"%>
+    <% else %>
+    <% @contactus.each do |f| %>
+    <h1><%= f.title %></h1></br>
+      <%= f.email %></br>
+      <%= f.address %></br>
+      <%= f.phone_no %></br>
+      <%= f.fax_no %></br>
+      <%= link_to_modal "Edit", {:controller => 'contacts', :action => 'edit', :id => f.id }, :class => "btn-small btn-primary" %>
+      <%= link_to "Delete", {:controller => 'contacts', :action => 'destroy', :id => f.id }, :method => 'delete', :confirm => "Are you sure?", :class => "btn-small btn-danger" %>
+    <% end %>
+  <% end %>
+</div>

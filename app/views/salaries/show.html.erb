@@ -1,0 +1,19 @@
+<table class="table table-striped table-bordered">
+<tr >
+  <th> Employee Number: </th><td> <%=@salary.emp_no%></td><th>    Employee_Name:</th><td>  <%= @salary.emp_name %></td></tr>
+  <tr >
+    <th>  Target Year: </th><td> <%=@salary.target_year%> </td><th>   Target Month: </th><td><%=@salary.target_month%></td></tr>
+
+  <tr >
+    <th>  Day Rate: </th><td> <%= @salary.day_rate %>   </td><th>     Present Days: </th><td><%=@salary.working_days%></td></tr>
+  <tr >
+    <th>  Basic Salary: </th><td> <%=@salary.basic_salary %>   </td><th>            </th><td> </td></tr>
+
+   <tr >
+    <th > Travel Expense: </th><td><%=@salary.travel_expense%>   </td><th>          </th><td> </td></tr>
+    <tr >
+    <th> Other Expense: </th><td><%=@salary.other_expense%>   </td><th>  Other Decuctions:</th><td> <%=@salary.other_decuction%></td></tr>
+<tr >
+    <th> Total Payable: </th><td><%=@salary.total_payable%>   </td><th>  Net Payable:</th><td> <%=@salary.net_payable%></td></tr>
+
+</table>

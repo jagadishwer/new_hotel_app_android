@@ -1,0 +1,30 @@
+<div class="page-header" style="margin-top: 10px;">
+  <h1 style="text-align:left;color:whitesmoke;font-variant:small-caps;font-family:fantasy;margin-left:20px;">Attendance for <%= Time.now.month%> / <%= Time.now.year%></h1>
+</div>
+ 
+<div style="width:800px;height:500px;background-color:white;margin:auto;border:3px solid #333333;overflow:scroll;">
+<table class="table table-striped table-bordered">
+  <tr >
+    <th id="table_header"> Employee No </th>
+
+    <th id="table_header"> Employee Name</th>
+     <th id="table_header">No of Days Worked</th>
+
+    <th id="table_header"></th>
+  </tr>
+
+<%@attendances.each do |a|%>
+
+  <tr>
+    <td><%=a.emp_no%></td>
+    <td><%=a.emp_name%></td>
+    <td><%=a.total%></td>
+    <td><%=link_to "edit", {:controller=>'attendances',:action=>'edit',:id=>a.id},:class=>"btn-small btn-primary"%></td>
+  </tr>
+
+<%end%>
+</table>
+    <br/>
+    <%=link_to "Add Employee Attendance", {:controller=>'attendances',:action=>'new'},:class=>"btn-large btn-success"%>
+ 
+</div>

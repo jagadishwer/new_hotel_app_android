@@ -1,0 +1,11 @@
+<%= form_for @orderlist, {:url=>"/orderlists/create"} do |f| %>
+ <%= render 'shared/error_messages', :target => f.object %>
+<%=hidden_field_tag 'orderlist[id]', @id%>
+<%=hidden_field_tag 'orderlist[price]', @price%>
+  <%= f.label :quantity,"quantity"%>
+
+  <%= f.text_field :quantity %></br>
+
+
+  <%= f.submit %>
+<% end %>

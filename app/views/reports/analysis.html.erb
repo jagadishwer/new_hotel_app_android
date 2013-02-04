@@ -1,0 +1,61 @@
+
+<script>
+$(document).ready(function(){
+  analysis_last();
+});
+  function analysis_last()
+  {
+   
+    var xmlhttp;
+    if (window.XMLHttpRequest)
+    {// code for IE7+, Firefox, Chrome, Opera, Safari
+      xmlhttp=new XMLHttpRequest();
+    }
+    else
+    {// code for IE6, IE5
+      xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    xmlhttp.onreadystatechange=function()
+    {
+      if (xmlhttp.readyState==4 && xmlhttp.status==200)
+      {
+        document.getElementById("analysis").innerHTML=xmlhttp.responseText;
+      }
+    }
+    xmlhttp.open("GET","/reports/analysis_last",true);
+    xmlhttp.send();
+  }
+  function analysis_from_start()
+  {
+    var xmlhttp;
+    if (window.XMLHttpRequest)
+    {// code for IE7+, Firefox, Chrome, Opera, Safari
+      xmlhttp=new XMLHttpRequest();
+    }
+    else
+    {// code for IE6, IE5
+      xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    xmlhttp.onreadystatechange=function()
+    {
+      if (xmlhttp.readyState==4 && xmlhttp.status==200)
+      {
+        document.getElementById("analysis").innerHTML=xmlhttp.responseText;
+      }
+    }
+    xmlhttp.open("GET","/reports/analysis_from_start",true);
+    xmlhttp.send();
+  }
+
+  </script>
+<div class="page-header" style="margin-top: 10px;margin-left: 65px;">
+  <h1 style="text-align:left;color:whitesmoke;font-variant:small-caps;font-family:fantasy;margin-left:20px;">Usage Analysis</h1>
+</div>
+<div style="width:800px;">
+  <div style="float:right;">
+<%=button_tag "Present Usage",:class=>"btn btn-warning",:onclick=>"analysis_last()"%>
+<%=button_tag "Overall Usage",:class=>"btn btn",:onclick=>"analysis_from_start()"%></div>
+</div>
+<div id="analysis" style="width:800px;margin:auto;float: left;margin-left: 60px;">
+
+</div>

@@ -1,0 +1,13 @@
+<div style="margin-left: 50px; margin-right: 500px;margin-top: 20px;">
+<%= form_for @kitchen, {:url => '/kitchens/update'} do |f| %>
+<%= render 'shared/error_messages', :target => f.object %>
+  <%=f.hidden_field :id%>
+  <%= f.label :name %>
+  <%= f.text_field :name, :id => 'card_no' %></br>
+ <%= f.label :description %>
+  <%= f.text_area :description, :style => 'height:200px; width:220px;' %>
+  <%= f.label :counter%>
+  <%= f.select :counter_id, Counter.all.collect { |c| [ c.name, c.id ] }, { :include_blank => true } %> </br>
+  <%= f.submit "Update Category" %>
+<% end %>
+</div>

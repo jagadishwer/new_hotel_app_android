@@ -1,0 +1,22 @@
+
+<%unless @card.nil?%>
+<%=hidden_field_tag :check, session[:card]%>
+ <table class="table table-bordered">
+   <tr>
+     <td>Card Number: </td><td><%=@card.card_no%></td>
+   </tr>
+   <tr>
+     <td>Card Balance: (Rs)</td><td><%=@card.balance%></td>
+   </tr>
+   <tr>
+     <td>Start Date: </td><td><%=@card.created_at.to_date%></td>
+   </tr>
+   <tr>
+     <td>Last Used:</td><td><%=@card.updated_at.to_time%></td>
+   </tr>
+   <tr >
+     <td colspan="2"><center><button type="button" class="btn btn-small btn-primary" onclick="cancel()">Cancel</button></center></td>
+   </tr>
+</table>
+
+<%end%>

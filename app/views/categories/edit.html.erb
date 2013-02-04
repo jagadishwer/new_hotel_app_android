@@ -1,0 +1,7 @@
+
+<%= form_for @category, {:url => '/categories/update'} do |f| %>
+  <%=f.hidden_field :id%>
+  <%= f.label :name %>
+  <%= f.text_field :name %></br>
+  <%= f.submit "Update Category" %>
+<% end %>

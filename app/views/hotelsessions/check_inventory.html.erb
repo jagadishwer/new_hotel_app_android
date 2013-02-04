@@ -1,0 +1,118 @@
+
+<script>
+$(document).ready(function(){
+
+
+$('#intord').click(function()
+{
+ internal_orders() ;
+});
+
+
+});
+
+function internal_orders()
+  {
+
+
+
+       //card_no = $('#card_no').val();
+
+      var xmlhttp;
+    if (window.XMLHttpRequest)
+    {// code for IE7+, Firefox, Chrome, Opera, Safari
+      xmlhttp=new XMLHttpRequest();
+    }
+    else
+    {// code for IE6, IE5
+      xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    xmlhttp.onreadystatechange=function()
+    {
+      if (xmlhttp.readyState==4 && xmlhttp.status==200)
+      {
+        document.getElementById("myDiv1").innerHTML=xmlhttp.responseText;
+      }
+    }
+//alert('ok');
+    //xmlhttp.open("GET","/orders/create?total="+sum+"&card_no="+card_no,true);
+    xmlhttp.open("GET","/reports/internal_orders",true);
+    xmlhttp.send();
+
+  }
+
+
+
+function confirm(id)
+{
+  var xmlhttp;
+    if (window.XMLHttpRequest)
+    {// code for IE7+, Firefox, Chrome, Opera, Safari
+      xmlhttp=new XMLHttpRequest();
+    }
+    else
+    {// code for IE6, IE5
+      xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    xmlhttp.onreadystatechange=function()
+    {
+      if (xmlhttp.readyState==4 && xmlhttp.status==200)
+      {
+        document.getElementById("myDiv1").innerHTML=xmlhttp.responseText;
+      }
+    }
+//alert('ok');
+    //xmlhttp.open("GET","/orders/create?total="+sum+"&card_no="+card_no,true);
+    xmlhttp.open("GET","/reports/updateorder?id="+ id,true);
+    xmlhttp.send();
+}
+function confirm_all()
+{
+  var xmlhttp;
+    if (window.XMLHttpRequest)
+    {// code for IE7+, Firefox, Chrome, Opera, Safari
+      xmlhttp=new XMLHttpRequest();
+    }
+    else
+    {// code for IE6, IE5
+      xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    xmlhttp.onreadystatechange=function()
+    {
+      if (xmlhttp.readyState==4 && xmlhttp.status==200)
+      {
+        document.getElementById("myDiv1").innerHTML=xmlhttp.responseText;
+      }
+    }
+//alert('ok');
+    //xmlhttp.open("GET","/orders/create?total="+sum+"&card_no="+card_no,true);
+    xmlhttp.open("GET","/reports/update_all_order",true);
+    xmlhttp.send();
+}
+
+
+
+
+</script>
+
+
+
+<div class="page-header" style="margin-top: 10px;">
+  <h1 style="text-align:left;color:whitesmoke;font-variant:small-caps;font-family:fantasy;margin-left:20px;">Check Inventory</h1>
+</div>
+<div class="settings_buttons" style ="width:auto;">
+  <%=link_to "Suppliers", '/suppliers/show',:class=>"jbtn"%>
+  <%=link_to "Stock List",'/stock_list_items/show',:class=>"jbtn"%>
+  <%=link_to "Delivered Items",'/delivery_items/new',:class=>"jbtn"%>
+  <%=link_to "Remaining Items",'/remaining_items/new',:class=>"jbtn"%>
+  <%=link_to "Internal Order",'#',:class=>"jbtn",:id=>'intord'%>
+  <%=link_to "Remaining Stock",'/remaining_stocks/show',:class=>"jbtn"%>
+
+</div>
+<%#*Required AJAX code here....%>
+<div id ="myDiv1" style ="float: left; margin-left: 100px;margin-top:100px; ">
+
+</div>
+
+
+    

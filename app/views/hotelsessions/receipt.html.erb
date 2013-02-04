@@ -1,0 +1,17 @@
+<div style="background-color:#cccccc;width: auto;height: auto; ">
+<table class="table table-bordered">
+  <tr style="background-color:#999999"><td>Items </td><td>Quantity</td>
+       <td>Price Of Each</td><td> Total Price</td></tr>
+<%@orders.each do |order|%>
+  <%order.orderlists.each do|item| %>
+  <tr><td><%=item.itemname%> </td><td><%=item.quantity%></td>
+       <td><%=item.price%></td><td> <%=(item.quantity*item.price)%></td></tr>
+<%end%><%end%>
+  <%@tax.each do |t|%>
+        <tr><td></td><td><%=t.name%></td><td><%="#{t.percentage}%"%></td><td><%='%.2f' %(((@customer.total)/(t.percentage+100))*t.percentage)%></td>
+        </tr>
+        <%end%>
+  <tr><td> </td><td></td>
+       <td>Total Bill</td><td> <%=@customer.total%></td></tr>
+</table>
+</div>

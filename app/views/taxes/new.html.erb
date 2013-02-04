@@ -1,0 +1,17 @@
+<style>
+  #new_tax{
+    height:400px;
+    overflow: scroll;
+}
+</style>
+<%= form_for @tax, {:url=>"/taxes/create"} do |f| %>
+  <%= f.label :name, "Name" %>
+  <%= f.text_field :name %></br>
+
+  <%= f.label :percentage,"Percentage"%>
+
+  <%= f.text_field :percentage %></br>
+
+
+  <%= f.submit %>
+<% end %>

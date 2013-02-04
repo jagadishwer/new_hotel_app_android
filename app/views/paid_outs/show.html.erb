@@ -1,0 +1,33 @@
+<div class="page-header"style="margin-top: 10px;">
+    <h1 style="text-align:left;color:whitesmoke;font-variant:small-caps;font-family:fantasy;margin-left:20px;">Paid Outs</h1>
+</div>
+
+<div style="width:800px;height:500px;background-color:white;margin:auto;border:5px solid ;overflow:scroll;border-radius:6px;">
+  
+<table class="table table-striped table-bordered">
+  <tr style="background-color:#ffcccc">
+    <th id="table_header">S.NO</th>
+    <th id="table_header">Created At</th>
+    <th id="table_header">To Whom</th>
+    <th id="table_header">Amount (Rs)</th>
+    <th id="table_header">Reason</th>
+
+    
+  </tr>
+  <%@i=0%>
+<%@paid_outs.each do |s|%>
+
+  <tr>
+    <td><%@i+=1%><%=@i%></td>
+    <td><%=s.created_at.to_date%></td>
+    <td><%=s.to%></td>
+    <td><%=s.amount%></td>
+    <td> <%=s.reason%></td></tr>
+
+<%end%>
+</table>
+    <br/>
+    <%=link_to_modal "Pay", {:controller => 'paid_outs', :action => 'new'}, :class=> "btn-large btn-success" %>
+<%=link_to "Payments To Suppliers",'/reports/payments_due',:class=>"jbtn"%>
+
+</div>

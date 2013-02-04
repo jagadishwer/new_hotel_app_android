@@ -1,0 +1,35 @@
+<h1>Gallery</h1>
+  <div style="width:800px;height:500px;background-color:white;margin:auto;border:3px solid #333333;overflow:scroll;">
+<table class="table table-hover"style="border:1px solid rgb(221,221,221);margin:auto; ">
+
+<% @gallery.each do |f| %>
+  <tr style="background-color:#ffcccc">
+    <td> <%= f.title %>
+    </td><td>
+
+    <%= link_to_modal "Edit", {:controller => 'galleries', :action => 'edit', :id => f.id}, :class =>"btn-small btn-primary" %>
+    <%= link_to "Delete", {:controller => 'galleries', :action => 'destroy', :id => f.id}, :class =>"btn-small btn-danger" %>
+
+    </td></tr>
+  <tr><td>
+  <ul class ="thumbnails" id = "ulthumbs">
+    <% f.images.each do |i| %>
+      <li>
+        <a class="thumbnail" style="width:120px; height:120px; line-height:120px;" >
+          <%= image_tag i.photo_url %>
+        </a>
+      </li>
+      <% end %>
+  </ul></td></tr>
+    
+<% end %>
+</table>
+<br/><br/>
+
+<%=link_to_modal "Create New Gallery", {:controller=>'galleries',:action=>'new'},:class=>"btn-large btn-success"%>
+
+  </div>
+
+
+
+

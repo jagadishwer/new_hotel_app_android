@@ -1,0 +1,9 @@
+<%= form_for @card, {:url=>"/swipeCards/create"} do |f| %>
+<%#= render 'shared/error_messages', :target => 'f.object' %>
+  <%= f.label :card_no %>
+  <%= f.text_field :card_no, :id => 'card_no' %></br>
+  <%= f.label :amount %>
+  <%= f.text_field :balance, :id => 'card_no' %></br>
+  <%= f.submit %>
+<% end %>
+

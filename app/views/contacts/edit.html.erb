@@ -1,0 +1,24 @@
+<style>
+  .edit_contact{
+    overflow: scroll;
+    height:600px;
+}
+</style>
+<%= form_for @contactus, :url => '/contacts/update' do |f| %>
+  <%= f.hidden_field :id %>
+  <%= f.label :title %>
+  <%= f.text_field :title %>
+  <%= f.label :email %>
+  <%= f.email_field :email %>
+  <%= f.label :address %>
+  <%= f.text_area :address %>
+  <%= f.label :phone_no %>
+  <%= f.text_field :phone_no %>
+  <%= f.label :fax_no %>
+  <%= f.text_field :fax_no %>
+<%= f.label :latitude %>
+  <%= f.text_field :latitude %>
+<%= f.label :longitude %>
+  <%= f.text_field :longitude %>
+  <%= f.submit "Update" %>
+<% end %>

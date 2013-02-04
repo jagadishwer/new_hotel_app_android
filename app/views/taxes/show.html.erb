@@ -1,0 +1,30 @@
+<div style="width:800px;height:500px;background-color:white;margin:auto;border:3px solid #333333;overflow:scroll;">
+  <table class="table table-hover"style="border:1px solid rgb(221,221,221);margin:auto; ">
+    <tr style="background-color:#ffcccc">
+      <td> S.NO</td>
+      <td>Tax Specification</td>
+      <td>Percentage (%)</td>
+      <td></td>
+    </tr>
+    <%@i=0%>
+    <%@taxes.each do |s|%>
+
+      <tr>
+        <td><%@i+=1%><%=@i%></td>
+        <td><%=s.name%></td>
+        <td><%=s.percentage%></td>
+        <td><%=link_to_modal "Edit", {:controller=>'taxes',:action=>'edit',:id=>s.id},:class=>"btn-small btn-primary"%></td>
+
+      </tr>
+
+    <%end%>
+    <tr style="background-color:#cccccc;">
+      <td> </td>
+      <td>Total Tax</td>
+      <td><%=@total%></td>
+      <td></td>
+    </tr>
+  </table>
+  <br/>
+  <%=link_to_modal "Add New Tax", {:controller=>'taxes',:action=>'new'},:class=>"btn-large btn-success"%>
+</div>

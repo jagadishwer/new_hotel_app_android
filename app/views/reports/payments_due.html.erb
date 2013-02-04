@@ -1,0 +1,38 @@
+<script>
+  function pay(id)
+  {
+    var xmlhttp;
+    if (window.XMLHttpRequest)
+    {// code for IE7+, Firefox, Chrome, Opera, Safari
+      xmlhttp=new XMLHttpRequest();
+    }
+    else
+    {// code for IE6, IE5
+      xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    xmlhttp.onreadystatechange=function()
+    {
+      if (xmlhttp.readyState==4 && xmlhttp.status==200)
+      {
+        document.getElementById(id).innerHTML=xmlhttp.responseText;
+      }
+    }
+
+    xmlhttp.open("GET","/suppliers/payment?id="+id ,true);
+    xmlhttp.send();
+  }
+</script>
+<div class="page-header"style="margin-top: 10px;">
+    <h1 style="text-align:left;color:whitesmoke;font-variant:small-caps;font-family:fantasy;margin-left:20px;">Payments Due</h1>
+</div>
+<%Supplier.all.each do |x|%>
+ <%@sum=DeliveryItem.sum(:mrp, :conditions=>{:supplier_id=>x.id,:payment_status=>0})%>
+  <%if (@sum>0)%>
+<div class="row-fluid btn btn-success" style="width:600px; margin:15px;padding:20px; ">
+
+  <div class="span4">
+<%=x.name%> </div> <div id=<%=x.id%>><div class="span4"><%=@sum%></div><div class="span2"> <button type="button" class="btn btn-danger" onclick="pay(<%=x.id%>)">Pay</button></div> <div class="span2">
+<%=link_to_modal "view", {:controller=>'suppliers',:action=>'supply_list',:id=>x.id},:class=>"btn btn-info" %> </div></div>
+</div>
+<%end%>
+<%end%>

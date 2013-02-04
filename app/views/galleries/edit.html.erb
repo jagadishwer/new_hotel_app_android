@@ -1,0 +1,18 @@
+<%= nested_form_for @gallery, :url => '/galleries/update', :html => {:multipart => true} do |f| %>
+  <%=f.hidden_field :id%>
+  <%= f.label :title %>
+  <%= f.text_field :title %>
+  <%= f.label :description %>
+  <%= f.text_area :description %>
+  <%= f.fields_for :images do |attachment_form|  %>
+
+    <p>
+    <%= attachment_form.label :photo %><br />
+    <%= attachment_form.file_field :photo %>
+    </p>
+    <div><%= image_tag(attachment_form.object.photo_url,:size=>"50x50") %></div>
+    <%= attachment_form.link_to_remove "Remove this attachment" %>
+  <% end %>
+  <%= f.link_to_add "Add attachment", :images %>
+  <p><%= f.submit %></p>
+<% end %>

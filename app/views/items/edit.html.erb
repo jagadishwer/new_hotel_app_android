@@ -1,0 +1,53 @@
+<style>
+  .edit_item{
+    height:400px;
+    overflow: scroll;
+}
+
+  .my_btn{
+    height: 70px;
+    width: 70px;
+
+ }
+
+</style>
+<%= nested_form_for @item, :url=>"/items/update", :html => {:multipart => true} do |f| %>
+   <%=f.hidden_field :id%>
+  <%= f.label :item_name, "Name" %>
+  <%= f.text_field :item_name %></br>
+  <%= f.label :category %>
+  <%= f.select :category_id, Category.all.collect { |c| [ c.name, c.id ] }, { :prompt =>'Select Category' } %> </br>
+  <%= f.label :kitchen%>
+  <%= f.select :kitchen_id, Kitchen.all.collect { |c| [ c.name, c.id ] }, { :prompt =>'Select Kitchen' } %> </br>
+  <%= f.label :description %>
+  <%= f.text_area :description, :cols => 20, :rows => 10 %>
+  <%= f.label :price %>
+  <%= f.text_field :price %>
+ <%= f.label :recipe %>
+  <%= f.fields_for :recipes do |res|%>
+  
+    <p>
+    <%= res.select "stock_list_item_id", StockListItem.all.collect{|sli|[sli.name,sli.id]},{:prompt=>"Select Raw Material"} %>
+    <%= res.text_field :quantity %>
+ <%= res.link_to_remove "X",:class => 'btn btn-danger ' %>
+    </p>
+    
+  <% end %>
+  <%= f.link_to_add "Add +", :recipes,:class => 'btn btn-success ' %>
+ <%= f.label :images %>
+
+  <%= f.fields_for :attachments do |attachment_form|%>
+  
+    <p>
+    <%= attachment_form.label :image %>
+    <%= attachment_form.file_field :image %>
+ <%= attachment_form.link_to_remove "X",:class => 'btn btn-danger ' %>
+ <div><%= image_tag(attachment_form.object.image_url,:size=>"50x50") %></div>
+ 
+    </p>
+    
+  <% end %>
+  <%= f.link_to_add "Add +", :attachments,:class => 'btn btn-success ' %><br/><br/>
+
+  <%= f.submit  :class => 'btn-primary btn-large my_btn' %>
+<% end %>

@@ -1,0 +1,77 @@
+
+<style>
+  .main_div{
+  color: white;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+  background-color: #5bb65b;
+  background-image: -moz-linear-gradient(top, #62c462, #51a351);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#62c462), to(#51a351));
+  background-image: -webkit-linear-gradient(top, #62c462, #51a351);
+  background-image: -o-linear-gradient(top, #62c462, #51a351);
+  background-image: linear-gradient(to bottom, #62c462, #51a351);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff62c462', endColorstr='#ff51a351', GradientType=0);
+  /*border-color: #51a351 #51a351 #387038;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) fadein(rgba(0, 0, 0, 0.1), 15%);
+  *background-color: #51a351;
+   Darken IE7 buttons by default so they stand out more given they won't have borders */
+  filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
+  }
+</style>
+
+<div id="myDiv" style="width:100%;">
+<%#*<div>%>
+  <%#*<h2><%= @counter.name %>
+<%#*</div>%>
+<div class ="main_div"style="width: 30%;height:800px;margin-bottom: 0px;float: left;margin-left: 30px;overflow: scroll;border:1px solid black;padding: 25px;">
+  <div class="row-fluid" style="margin-left:0px;">
+<% @items.each do |i| %>
+   <div class="span3"> <%= link_to_modal (image_tag i.attachments.shuffle.first.image_url,:size=>'180x180'),{:controller=>'orderlists',:action=>'new',:id=>i.id,:price=>i.price},:class=>"thumbnail",:style=>'height:180px;width:180px;
+line-height: 50px;'%>
+     <p><%=  i.item_name %></p></div>
+<% end %>
+  </div>
+</div>
+<div style="width:30%;height:400px; background-color:white;margin-bottom: 0px;float: left;margin-left: 0px;overflow: scroll;">
+      <table class="table table-bordered">
+        <tr style="background-color:#ffcccc; ">
+          <td>Item</td>
+          <td>Quantity </td>
+          <td>Unit Price (Rs)</td>
+          <td>Total Price (Rs)</td>
+          <td></td>
+        </tr>
+        <%@sum=0%>
+        <%if !@order_lists.empty?%>
+        <%@order_lists.each do |ol|%>
+        <tr>
+          <td><%=ol.itemname%></td>
+          <td><%=ol.quantity%></td>
+          <td><%=ol.price%></td>
+          <td><%@sum+=ol.quantity*ol.price%><%=ol.quantity*ol.price%></td>
+          <td><%=link_to "delete",{:controller=>"orderlists",:action=>'cancel',:id=>ol.id} %></td>
+        </tr>
+        <%end%>
+        <%end%>
+        <tr style="background-color:#cccccc; ">
+          <td></td>
+          <td>TOTAL</td>
+          <td></td>
+          <td><%=@sum%></td>
+          <td></td>
+        </tr>
+      </table>
+  
+</div>
+
+  <div style="width: 30%;margin-bottom: 0px;float: left;margin-left: 0px;">
+
+   <%=link_to_modal "Confirm Order", {:controller=>'counters',:action=>'confirm_order',:total=>@sum},:class=>'thumbnail btn btn-success', :style=>'height: 50px;
+line-height: 50px;'%>
+  <%=link_to "Cancel Order", "/orders/cancel_order",:class=>'thumbnail btn btn-danger', :confirm => "Are you sure?, the action cannot be undone!", :style=>'height: 50px;
+line-height: 50px;'%>
+    <%#=link_to_modal "adjust", '#',:class=>'thumbnail btn btn-success', :style=>'height: 50px;line-height: 50px;'%>
+  <%#=link_to "print", {:action=>'receipt',:id=>customer.id}, :class=>"btn btn-warning" %>
+</div>
+ 
+</div>

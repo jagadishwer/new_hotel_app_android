@@ -1,0 +1,66 @@
+<div style ="margin-left: 30px;margin-top:20px;">
+    <%=link_to "Save as PDF", {:action=>'inventory_pdf',:format=>'pdf',:end_date=>@ed,:start_date=>@sd},:target=>'_blank',:class=>'btn-large btn-primary'%> 
+     <%=link_to "Send Report", {:action=>'send_day_report',:controller=>'reports'},:class=>'btn-large btn-info'%><br/><br/>
+
+</div>
+
+<div style="width:950px;height:500px;background-color:white; margin-left:30px;border:3px solid black; overflow:scroll;">
+  <table class="table table-hover "style="border:1px solid rgb(221,221,221)">
+    <tr style="background-color:#ffcccc"><td></td>
+       <td><%=Date.today%></td><td></td>
+         </tr>
+         <tr><td>Customer count</td>
+            <td> <%=Customer.count(:conditions=>{:date_of_transcation=>Date.today})%></td><td></td>
+          </tr>
+        <tr><td>NET SALES</td>
+            <td><%=Customer.sum(:total,:conditions=>{:status=>2,:date_of_transcation=>Date.today})%>
+           </td><td></td>
+           </tr>
+      </table>
+      <p style="background-color: rgb(221, 221, 221);text-align: center;font-weight:bold">SALES REPORT</p>
+<%#*<tr style="background-color: rgb(221, 221, 221);"><td style="text-align: center;font-weight:bold">SALES REPORT</td></tr>%>
+
+<table class="table table-hover "style="border:1px solid rgb(221,221,221)">
+        <tr style="background-color:blanchedalmond; "> <td>NAME:</td> <td >QUANTITY </td><td>PRICE</td><td>TOTAL SALE</td>
+     </tr>
+     <%if !@items.empty?%>
+<%(@items).each do |i|%>
+        <%#*<td></td>%>
+        
+          <tr><td><%=i.item_name%></td>
+            <td><%=i.orderlists.sum(:quantity,:conditions=>{:created_at=>(Date.today.to_time..Date.tomorrow.to_time)})%></td> <td><%=i.price%> </td><td><%=i.price*i.orderlists.sum(:quantity,:conditions=>{:created_at=>(Date.today.to_time..Date.tomorrow.to_time)})%></td>
+<%end%>
+          <%end%></tr>
+
+
+
+
+    </table>
+<p style="background-color: rgb(221, 221, 221);text-align: center;font-weight:bold">HOURLY TRANSACTIONS</p>
+
+      <table class="table table-bordered">
+        <tr style="background-color:blanchedalmond; "> <td>SERIAL NO:</td> <td >TABLE NO: </td><td>TIME</td><td>TOTAL</td>
+          <%#*<td></td>%>
+        </tr>
+        <%@customers.each do |customer|%>
+
+        <tr style="background-color:whitesmoke; "><td><%=customer.serial_no%></td><td><%=customer.table.table_name%></td><td><%=customer.date_of_transcation%></td><td><%=customer.total%></td>
+          <%#*<td> <button type="button" class="btn-small btn-info" onclick="view(<%=order.id%)">view</button></td>%>
+        </tr>
+
+
+<%end%>
+        
+      </table>
+
+  <%#*</div>%>
+  <%#*<div style="width:1100px;height:200px;background-color:white;margin-left:30px;margin-top: 20px;border:3px solid black; overflow:scroll;">%>
+
+    <%#h=@a.max%>
+    <%#*<center><%=image_tag Gchart.line(:title => 'sales',:bar_colors => 'FF0000,00FF00',:size=>'1000x200',%>
+              <%#*:data => [@a,@r],:axis_with_labels => ["x","y"],:axis_labels => [@l,[0,(h/4).round,(h/3).round,(h/2).round,h.round]] )%</center>%>
+<%#else%>
+          <%#="No TRANSCATIONS IN GIVEN DATES"%>
+<%#end%>
+    <%#*</div>%>
+</div>

@@ -1,0 +1,5 @@
+<%= form_for @stock_list_item, :url => '/stock_list_items/create' do |f| %>
+  <%= f.label :name %>
+  <%= f.text_field :name %>
+  <%= f.submit "Create" %>
+<% end %>

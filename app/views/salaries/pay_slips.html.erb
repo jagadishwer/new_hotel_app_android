@@ -1,0 +1,24 @@
+
+
+<%@salaries.each do |s|%>
+
+<table class="table table-striped table-bordered">
+<tr >
+  <th> Employee Number: </th><td> <%=s.emp_no%></td><th>    Employee_Name:</th><td>  <%= s.emp_name %></td></tr>
+  <tr >
+    <th>  Target Year: </th><td> <%=s.target_year%> </td><th>   Target Month: </th><td><%=s.target_month%></td></tr>
+
+  <tr >
+    <th>  Day Rate: </th><td> <%= s.day_rate %>   </td><th>     Present Days: </th><td><%=s.working_days%></td></tr>
+  <tr >
+    <th>  Basic Salary: </th><td> <%=s.basic_salary %>   </td><th>            </th><td> </td></tr>
+
+   <tr >
+    <th > Travel Expense: </th><td><%=s.travel_expense%>   </td><th>          </th><td> </td></tr>
+    <tr >
+    <th> Other Expense: </th><td><%=s.other_expense%>   </td><th>  Other Decuctions:</th><td> <%=s.other_decuction%></td></tr>
+<tr >
+    <th> Total Payable: </th><td><%=s.total_payable%>   </td><th>  Net Payable:</th><td> <%=s.net_payable%></td></tr>
+
+</table>
+<%end%>

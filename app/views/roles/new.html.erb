@@ -1,0 +1,10 @@
+<style>
+  #role_button{
+    height: 50px;
+}
+</style>
+<%= form_tag('/roles/create') do -%>
+  <%= label_tag :name, "Role Name:" %>
+  <%= text_field_tag :name %></br>
+  <%= submit_tag "Create Role", :class => 'btn-large btn-success', :id => 'role_button' %>
+<% end -%>

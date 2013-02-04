@@ -1,0 +1,40 @@
+ <%= javascript_include_tag  "jquery" %>
+   <%= stylesheet_link_tag "jquery.keypad"%>
+<%= javascript_include_tag  "jquery.keypad" %>
+<script>
+$(document).ready(function(){
+
+
+  $(':text').keypad({keypadOnly: false,
+    layout: $.keypad.qwertyLayout});
+});
+</script>
+<table class="table table-striped table-bordered">
+        <tr style="background-color:#ffcccc; ">
+          <th id="table_header">Item</th>
+          <th id="table_header">Quantity </th>
+          <th id="table_header">Unit Price (Rs)</th>
+          <th id="table_header">Total Price (Rs)</th>
+          <th id="table_header"></th>
+        </tr>
+        <%@sum=0%>
+        <%if !@order_lists.empty?%>
+        <%@order_lists.each do |ol|%>
+        <tr>
+          <td><%=ol.itemname%></td><td> <%=text_field_tag :chquan,ol.quantity,:onchange=>"edit_quantity(#{ol.id},#{ol.kitchen_id},#{ol.item_id})"%><%#=ol.quantity%></td><td><%=ol.price%></td><td><%@sum+=ol.quantity*ol.price%><%=ol.quantity*ol.price%></td><td>
+ <button type="button" class="btn-mini btn-danger" onclick="cancel1(<%=ol.id%>)" confirm = "Are you sure?, the action cannot be undone!">Delete</button>
+
+    <%#=link_to "delete",{:controller=>"orderlists",:action=>'cancel',:id=>ol.id} %></td>
+        </tr>
+        <%end%>
+        <%end%>
+        <tr style="background-color:#cccccc; "><td></td><td>Sub Total</td><td></td><td><%=@sum%></td><td></td>
+        </tr>
+        <%@tax.each do |t|%>
+        <tr style="background-color:#cccccc; "><td></td><td><%=t.name%></td><td><%="#{t.percentage}%"%></td><td><%=@sum*t.percentage/100%></td><td></td>
+        </tr>
+        <%end%>
+        <tr style="background-color:#cccccc; "><td></td><td>Total</td><td></td><td><%=@sum+(@sum*@total_tax)%></td><td></td>
+        </tr>
+      </table>
+<%=hidden_field_tag "sum",@sum+(@sum*@total_tax)%>
